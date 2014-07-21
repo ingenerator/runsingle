@@ -1,0 +1,82 @@
+21/07/2014 17:28:01: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:28:01: running testscript; timeout: 30 on instance #2 ...
+21/07/2014 17:28:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:28:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:28:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:28:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:28:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:28:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:28:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:29:02: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:29:02: running testscript; timeout: 30 on instance #8 ...
+21/07/2014 17:29:02: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:29:02: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:29:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:29:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:29:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:29:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:29:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:30:02: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:30:02: running testscript; timeout: 30 on instance #1 ...
+21/07/2014 17:30:02: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:30:02: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:30:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:30:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:30:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:30:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:30:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:31:02: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:31:02: running testscript; timeout: 30 on instance #4 ...
+21/07/2014 17:31:02: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:31:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:31:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:31:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:31:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:31:03: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:31:04: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:38:20: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:38:20: running testscript; timeout: 30 on instance #1 ...
+21/07/2014 17:39:18: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:39:18: running testscript; timeout: 30 on instance #1 ...
+21/07/2014 17:42:23: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:42:23: running testscript; timeout: 30 on instance #1 ...
+21/07/2014 17:43:01: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:43:01: running testscript; timeout: 30 on instance #6 ...
+21/07/2014 17:43:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:43:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:43:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:43:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:43:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:43:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:43:04: task_name: testscript; Running garbage collection ... still locked for 27 seconds.
+21/07/2014 17:44:05: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:44:05: running testscript; timeout: 30 on instance #1 ...
+21/07/2014 17:45:01: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:45:01: running testscript; timeout: 30 on instance #7 ...
+21/07/2014 17:45:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:45:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:45:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:45:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:45:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:45:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:45:04: task_name: testscript; Running garbage collection ... still locked for 27 seconds.
+21/07/2014 17:46:01: task_name: testscript; Running garbage collection ... released lock.
+
+21/07/2014 17:46:01: running testscript; timeout: 30 on instance #4 ...
+21/07/2014 17:46:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:46:01: task_name: testscript; Running garbage collection ... still locked for 30 seconds.
+21/07/2014 17:46:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:46:02: task_name: testscript; Running garbage collection ... still locked for 29 seconds.
+21/07/2014 17:46:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:46:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
+21/07/2014 17:46:03: task_name: testscript; Running garbage collection ... still locked for 28 seconds.
