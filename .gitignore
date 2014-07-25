@@ -1,0 +1,10 @@
+/.vagrant
+/vendor
+/bin
+/.idea/workspace.xml
+/architecture/vendor-cookbooks/*
+Thumbs.db
+thumbs.db
+/build
+/.secrets
+/composer.lock

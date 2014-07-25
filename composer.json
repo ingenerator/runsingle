@@ -1,0 +1,45 @@
+{
+    "name":        "ingenerator/runsingle",
+    "description": "Wrapper package for ensuring a script is only run once in a certain number of seconds, across multiple instances.",
+    "homepage":    "https://github.com/ingenerator/runsingle",
+    "type":        "library",
+    "license":     "proprietary",
+    "authors":     [
+        {
+            "name":     "inGenerator",
+            "homepage": "http://www.ingenerator.com/"
+        },
+        {
+            "name":     "Matthias Gisder",
+            "email":    "matthias@ingenerator.com",
+            "homepage": "http://www.ingenerator.com"
+        }
+    ],
+    "require": {
+        "php":                                 ">=5.3"
+    },
+    "require-dev": {
+        "phpspec/phpspec":                     "dev-master",
+        "phpspec/prophecy":                    "1.1.*@dev",
+        "bossa/phpspec2-expect":               "dev-master"
+    },
+    "suggest": {
+    },
+    "support": {
+        "issues": "https://github.com/ingenerator/runsingle/issues",
+        "source": "https://github.com/ingenerator/runsingle"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ingenerator": "src/",
+            "spec":   ""
+        }
+    },
+    "bin": [],
+    "config": {
+        "bin-dir": "bin",
+        "preferred-install": "dist"
+    },
+    "extra": {
+    }
+}
