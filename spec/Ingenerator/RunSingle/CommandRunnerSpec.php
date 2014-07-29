@@ -42,8 +42,6 @@ class CommandRunnerSpec extends ObjectBehavior
         } while (file_exists($non_dir));
 
         $this->subject->execute('ls '.escapeshellarg($non_dir) . " 2> /dev/null")->shouldNotBe(0);
-
-        ///////////////
         $this->subject->execute('ls '.escapeshellarg($non_dir) . " 2> /dev/null")->shouldBe(2);
     }
 
@@ -92,13 +90,10 @@ ARGS;
         $this->subject->execute($cmd);
         $received_output = file_get_contents($tmpfile);
 
-/////////////////////////
         $expected = <<<"OUTPUT"
 ls: cannot access $non_file: No such file or directory
 
 OUTPUT;
-//        print_r($received_output);
-//        print_r($expected);
         expect($received_output)->toBe($expected);
         unlink($tmpfile);
     }
