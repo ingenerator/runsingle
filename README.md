@@ -32,13 +32,13 @@ Or, from a script (see run_single.php):
 ###Call the wrapper from the shell
 
 ```php
-    php ./run_single.php --gc=1 --task_name=test --timeout=10 -- ls -l
+    php ./run_single.php --task_name=test --timeout=10 -- ls -l
 ```
 
 OR
 
 ```php
-    php ./run_single.php --gc=0 --task_name=test --timeout=10 -- ls -l
+    php ./run_single.php --no-garbage--collect --task_name=test --timeout=10 -- ls -l
 ```
 
 ###Garbage collection
