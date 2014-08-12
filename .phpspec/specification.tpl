@@ -3,7 +3,7 @@
  * Defines %name% - specifications for %subject%
  *
  * @copyright  2014 inGenerator Ltd
- * @licence    proprietary
+ * @licence    BSD
  */
 
 namespace %namespace%;

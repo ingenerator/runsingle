@@ -3,7 +3,7 @@
  * Defines %namespace%\%name%
  *
  * @copyright  2014 inGenerator Ltd
- * @licence    proprietary
+ * @licence    BSD
  */
 
 %namespace_block%
