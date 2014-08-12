@@ -4,7 +4,7 @@
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
- * @licence   proprietary
+ * @licence   BSD
  */
 
 
@@ -14,19 +14,22 @@ use \Ingenerator\RunSingle\PdoDatabaseObject;
 use \Ingenerator\RunSingle\DbDriver;
 use \Ingenerator\RunSingle\CommandRunner;
 
-class Factory {
+class Factory
+{
 
     const DB_DRIVER_FACTORY_FILE = 'run_single_config.php';
 
     public static function create()
     {
-        if(!file_exists(self::DB_DRIVER_FACTORY_FILE)){
-            throw(new \Exception('Please copy the config file named ' . self::DB_DRIVER_FACTORY_FILE . ' from the RunSingle project directory to your current working directory ' . realpath('./') . ' and change the database settings.' ));
+        $driver_factory_file_path = realpath('./') . '/' . self::DB_DRIVER_FACTORY_FILE;
+        if (! file_exists($driver_factory_file_path)) {
+            throw(new \Exception('Please create ' . $driver_factory_file_path . ' (you can find a template in src/Ingenerator/RunSingle/' . self::DB_DRIVER_FACTORY_FILE . ').'));
         }
-        $driver = include(realpath('./') . '/' . self::DB_DRIVER_FACTORY_FILE);
+        $driver = include($driver_factory_file_path);
 
-        $runner = new CommandRunner;
+        $runner    = new CommandRunner;
         $runsingle = new RunSingle($driver, $runner);
+
         return $runsingle;
     }
 
