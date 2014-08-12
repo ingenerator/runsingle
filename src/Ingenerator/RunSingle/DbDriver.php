@@ -67,7 +67,7 @@ class DbDriver implements LockDriver
         $timestamp = $this->get_time();
 
         if ($garbage_collect === TRUE) {
-            $this->garbage_collect($task_name, $timeout);
+            $this->garbage_collect($task_name);
         }
 
         try {
@@ -89,11 +89,10 @@ class DbDriver implements LockDriver
 
     /**
      * @param string $task_name
-     * @param int    $timeout
      *
      * @return void
      */
-    public function garbage_collect($task_name, $timeout)
+    public function garbage_collect($task_name)
     {
         $result = $this->db_object->fetch_all('SELECT * FROM ' . $this->db_object->get_db_table_name() . ' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
             ':task_name'         => $task_name,

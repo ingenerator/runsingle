@@ -26,11 +26,10 @@ interface LockDriver
      * Garbage collect stale entries in the lock storage.
      *
      * @param string $task_name
-     * @param int    $timeout
      *
      * @return void
      */
-    public function garbage_collect($task_name, $timeout);
+    public function garbage_collect($task_name);
 
     /**
      * Release a lock.
