@@ -1,6 +1,6 @@
 /.vagrant
 /vendor
-/bin
+/bin/*
 /.idea/workspace.xml
 /architecture/vendor-cookbooks/*
 Thumbs.db
