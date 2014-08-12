@@ -50,18 +50,8 @@ return Ingenerator\RunSingle\DbDriverFactory::factory(array(
 
 ### Using the standard driver with the wrapper script provided:
 ```bash
-bin/run_single.php [--no-garbage--collect] --task_name=<task_name> --timeout=<timeout_in_seconds> -- <command>
+bin/run_single.php --task_name=<task_name> --timeout=<timeout_in_seconds> -- <command>
 ```
-
-## Options:
-```bash
---no-garbage-collect
-```
-Add this to have RunSingle not automatically garbage collect stale entries
-from the lock storage.
-This will usually make sense in highly concurrent setups.
-Disable the garbage collection on all instances BUT ONE.
-Having --no-garbage-collect on ALL instances means the lock will never be cleared.
 
 ## Parameters:
 ```bash
@@ -84,6 +74,16 @@ This strategy also serves to maximise confidence in the command really having co
 The command to be run. Make sure there is a space ON BOTH SIDES OF THE DOUBLE DASH preceding the command,
 otherwise the wrapper cannot safely distinguish your command from its own arguments.
 Command arguments will be automatically escaped, so simply type the command after the " -- " as you would do on the shell.
+
+## Optional parameters:
+```bash
+--no-garbage-collect
+```
+Add this to have RunSingle not automatically garbage collect stale entries
+from the lock storage.
+This will usually make sense in highly concurrent setups.
+Disable the garbage collection on all instances BUT ONE.
+Having --no-garbage-collect on ALL instances means the lock will never be cleared.
 
 ## Command output ...
 is printed to STDOUT/STDERR as the actual script execution is done via system().
