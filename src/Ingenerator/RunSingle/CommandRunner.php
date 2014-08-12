@@ -4,18 +4,20 @@
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
- * @licence   proprietary
+ * @licence   BSD
  */
 
 
 namespace Ingenerator\RunSingle;
 
 
-class CommandRunner {
+class CommandRunner
+{
 
     /**
      * @param string $command
-     * @return mixed
+     *
+     * @return int
      */
     public function execute($command)
     {
