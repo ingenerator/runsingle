@@ -16,21 +16,23 @@ Clone or download this repository, or just add it to your composer.json:
 }
 ```
 
-You will need to be running a linux operating system with the `unzip` and `wget`
-libraries installed. You will also need php.
+You will need php.
 
 ## Initial DB configuration
 For use with the standard driver, RunSingle needs access to a MySql database
 with a table containing these fields:
 
-```bash
-task_name       : varchar(255), primary key
-lock_timestamp  : int
-timeout         : int
+```sql
+CREATE TABLE IF NOT EXISTS locks (
+  task_name varchar(255),
+  lock_timestamp int,
+  timeout int,
+  PRIMARY KEY (task_name)
 ```
 
 Create a file named 'run_single_config.php' in your project root on each instance.
-Call the Factory with an array containing the database credentials, e.g.:
+This file should return a LockDriver. You can return the standard database driver 
+by passing the credentials to the DbDriverFactory, e.g.:
 
 ```php
 <?php
@@ -45,14 +47,6 @@ return Ingenerator\RunSingle\DbDriverFactory::factory(array(
 ```
 
 ## Running tasks
-
-### From within PHP:
-```php
-$runsingle = \Ingenerator\RunSingle\Factory::create();
-$runsingle->execute($task_name, $command, $timeout, $automatic_garbage_collect);
-```
-See bin/run_single.php for an example.
-Read on for an explanation of the parameters.
 
 ### Using the standard driver with the wrapper script provided:
 ```bash
@@ -93,6 +87,17 @@ Command arguments will be automatically escaped, so simply type the command afte
 
 ## Command output ...
 is printed to STDOUT/STDERR as the actual script execution is done via system().
+
+## Using the LockDriver in your own classes
+
+```php
+$lock_driver = new \Ingenerator\RunSingle\DbDriver;
+$lock_id = $lock_driver->get_lock($task_name, $timeout, $garbage_collect);
+if ($lock_id) {
+// do your stuff
+  $lock_driver->release_lock($task_name, $lock_id);
+}
+```
 
 ## Roll your own driver
 In order to use another storage for the lock (different database system, memcached,
