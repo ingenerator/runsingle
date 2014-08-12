@@ -4,13 +4,16 @@
  *
  * @author    Matthias Gisder <matthias@ingenerator.com>
  * @copyright 2014 inGenerator Ltd
- * @licence   proprietary
+ * @licence   BSD
  */
 
 namespace Ingenerator\RunSingle;
 
-class RunSingle {
+use \Ingenerator\RunSingle\DbDriver;
+use \Ingenerator\RunSingle\CommandRunner;
 
+class RunSingle
+{
     /**
      * @var string
      */
@@ -26,20 +29,31 @@ class RunSingle {
      */
     protected $runner;
 
-    public function __construct($driver, $runner)
+    /**
+     * @param \Ingenerator\RunSingle\DbDriver      $driver
+     * @param \Ingenerator\RunSingle\CommandRunner $runner
+     */
+    public function __construct(DbDriver $driver, CommandRunner $runner)
     {
         $this->driver = $driver;
         $this->runner = $runner;
     }
 
+    /**
+     * @param $task_name
+     * @param $command
+     * @param $timeout
+     * @param $garbage_collect
+     *
+     * @return int
+     */
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {
         $this->driver->init();
-        $lock_timestamp = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
-        if($lock_timestamp !== FALSE)
-        {
+        $lock_id = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
+        if ($lock_id !== FALSE) {
             $exit_code = $this->runner->execute($command);
-            $this->driver->release_lock($task_name, $lock_timestamp);
+            $this->driver->release_lock($task_name, $lock_id);
             return $exit_code;
         }
 

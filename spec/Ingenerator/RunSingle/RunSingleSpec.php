@@ -2,9 +2,9 @@
 /**
  * Defines RunSingleSpec - specifications for Ingenerator\RunSingle\RunSingle
  *
- * @author    Matthias Gisder <matthias@ingenerator.com>
+ * @author     Matthias Gisder <matthias@ingenerator.com>
  * @copyright  2014 inGenerator Ltd
- * @licence    proprietary
+ * @licence    BSD
  */
 
 namespace spec\Ingenerator\RunSingle;
@@ -26,11 +26,11 @@ class RunSingleSpec extends ObjectBehavior
      * Use $this->subject to get proper type hinting for the subject class
      * @var \Ingenerator\RunSingle\RunSingle
      */
-	protected $subject;
+    protected $subject;
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
-     * @param \Ingenerator\RunSingle\CommandRunner  $runner
+     * @param \Ingenerator\RunSingle\DbDriver      $driver
+     * @param \Ingenerator\RunSingle\CommandRunner $runner
      */
     function let($driver, $runner)
     {
@@ -40,13 +40,13 @@ class RunSingleSpec extends ObjectBehavior
         $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('bool'))->willReturn(FALSE);
     }
 
-	function it_is_initializable()
+    function it_is_initializable()
     {
         $this->subject->shouldHaveType('Ingenerator\RunSingle\RunSingle');
-	}
+    }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
+     * @param \Ingenerator\RunSingle\DbDriver $driver
      */
     function it_initialises_the_driver($driver)
     {
@@ -55,7 +55,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
+     * @param \Ingenerator\RunSingle\DbDriver $driver
      */
     function it_tries_to_get_lock_for_requested_task_and_passes_timeout($driver)
     {
@@ -64,7 +64,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
+     * @param \Ingenerator\RunSingle\DbDriver $driver
      */
     function it_passes_garbage_collect_option_to_get_lock_method($driver)
     {
@@ -73,7 +73,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
+     * @param \Ingenerator\RunSingle\DbDriver $driver
      */
     function it_returns_zero_if_lock_not_available($driver)
     {
@@ -82,8 +82,8 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
-     * @param \Ingenerator\RunSingle\CommandRunner  $runner
+     * @param \Ingenerator\RunSingle\DbDriver      $driver
+     * @param \Ingenerator\RunSingle\CommandRunner $runner
      */
     function it_runs_task_and_returns_exit_code_if_task_ran($driver, $runner)
     {
@@ -94,7 +94,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver       $driver
+     * @param \Ingenerator\RunSingle\DbDriver $driver
      */
     function it_releases_lock_if_it_got_one($driver)
     {
@@ -105,9 +105,9 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\DbDriver $driver
-     * @param string $task_name
-     * @param int $timeout
-     * @param int $lock_id
+     * @param string                          $task_name
+     * @param int                             $timeout
+     * @param int                             $lock_id
      */
     public function given_lock_is_available($driver, $task_name, $timeout, $lock_id)
     {
