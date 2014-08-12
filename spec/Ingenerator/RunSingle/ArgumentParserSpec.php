@@ -4,7 +4,7 @@
  *
  * @author     Matthias Gisder <matthias@ingenerator.com>
  * @copyright  2014 inGenerator Ltd
- * @licence    proprietary
+ * @licence    BSD
  */
 
 namespace spec\Ingenerator\RunSingle;
@@ -23,34 +23,18 @@ class ArgumentParserSpec extends ObjectBehavior
      * Use $this->subject to get proper type hinting for the subject class
      * @var \Ingenerator\RunSingle\ArgumentParser
      */
-	protected $subject;
+    protected $subject;
 
-    function it_throws_without_command()
+    function it_is_initializable()
     {
-        $args = array(
-            './run_single.php',
-            '--task_name=testscript',
-            '--timeout=10',
-        );
-        try {
-            $result = $this->subject->parse($args);
-            throw new FailureException("Expected exception not thrown");
-        } catch (\InvalidArgumentException $e){
-            // Expected
-        }
-
+        $this->subject->shouldHaveType('Ingenerator\RunSingle\ArgumentParser');
     }
-
-	function it_is_initializable()
-    {
-		$this->subject->shouldHaveType('Ingenerator\RunSingle\ArgumentParser');
-	}
 
     function it_parses_timeout_from_commandline()
     {
-        $args = array(
+        $args   = array(
             './run_single.php',
-            '--gc=0',
+            '--no-garbage-collect',
             '--task_name=testscript',
             '--timeout=10',
             '--',
@@ -64,7 +48,7 @@ class ArgumentParserSpec extends ObjectBehavior
 
     function it_parses_command_from_commandline()
     {
-        $args = array(
+        $args   = array(
             './run_single.php',
             '--task_name=testscript',
             '--timeout=10',
@@ -86,11 +70,12 @@ class ArgumentParserSpec extends ObjectBehavior
         );
         $result = $this->subject->parse($args);
 
-        $result['command']->shouldBe("'php' 'script.php' '-o' '--opt=value' 'name' '8' 'additional_arg' '/some/directory with/spaces' '/some/directory' 'with/spaces' 'without' 'quotes' '--' 'gratuitous_stuff'");    }
+        $result['command']->shouldBe("'php' 'script.php' '-o' '--opt=value' 'name' '8' 'additional_arg' '/some/directory with/spaces' '/some/directory' 'with/spaces' 'without' 'quotes' '--' 'gratuitous_stuff'");
+    }
 
     function it_parses_task_name_from_commandline()
     {
-        $args = array(
+        $args   = array(
             './run_single.php',
             '--task_name=testscript',
             '--timeout=10',
@@ -105,7 +90,7 @@ class ArgumentParserSpec extends ObjectBehavior
 
     function it_defaults_to_garbage_collect_active()
     {
-        $args = array(
+        $args   = array(
             './run_single.php',
             '--task_name=testscript',
             '--timeout=10',
@@ -120,9 +105,9 @@ class ArgumentParserSpec extends ObjectBehavior
 
     function it_parses_no_garbage_collect_option_from_commandline()
     {
-        $args = array(
+        $args   = array(
             './run_single.php',
-            '--gc=0',
+            '--no-garbage-collect',
             '--task_name=testscript',
             '--timeout=10',
             '--',
@@ -137,7 +122,7 @@ class ArgumentParserSpec extends ObjectBehavior
     {
         $args = array(
             './run_single.php',
-            '--gc=0',
+            '--no-garbage-collect',
             '--timeout=10',
             '--',
             'php',
@@ -146,17 +131,16 @@ class ArgumentParserSpec extends ObjectBehavior
         try {
             $result = $this->subject->parse($args);
             throw new FailureException("Expected exception not thrown");
-        } catch (\InvalidArgumentException $e){
+        } catch (\InvalidArgumentException $e) {
             // Expected
         }
     }
-
 
     function it_throws_without_timeout()
     {
         $args = array(
             './run_single.php',
-            '--gc=0',
+            '--no-garbage-collect',
             '--task_name=testscript',
             '--',
             'php',
@@ -165,8 +149,44 @@ class ArgumentParserSpec extends ObjectBehavior
         try {
             $result = $this->subject->parse($args);
             throw new FailureException("Expected exception not thrown");
-        } catch (\InvalidArgumentException $e){
+        } catch (\InvalidArgumentException $e) {
             // Expected
         }
     }
+
+    function it_throws_with_non_numeric_timeout()
+    {
+        $args = array(
+            './run_single.php',
+            '--no-garbage-collect',
+            '--task_name=testscript',
+            '--timeout=text',
+            '--',
+            'php',
+            'script.php',
+        );
+        try {
+            $result = $this->subject->parse($args);
+            throw new FailureException("Expected exception not thrown");
+        } catch (\InvalidArgumentException $e) {
+            // Expected
+        }
+    }
+
+    function it_throws_without_command()
+    {
+        $args = array(
+            './run_single.php',
+            '--task_name=testscript',
+            '--timeout=10',
+        );
+        try {
+            $result = $this->subject->parse($args);
+            throw new FailureException("Expected exception not thrown");
+        } catch (\InvalidArgumentException $e) {
+            // Expected
+        }
+
+    }
+
 }
