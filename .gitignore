@@ -8,3 +8,5 @@ thumbs.db
 /build
 /.secrets
 /composer.lock
+
+!/bin/run_single.php
