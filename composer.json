@@ -1,27 +1,27 @@
 {
-    "name":        "ingenerator/runsingle",
-    "description": "Wrapper package for ensuring a script is only run once in a certain number of seconds, across multiple instances.",
-    "homepage":    "https://github.com/ingenerator/runsingle",
-    "type":        "library",
-    "license":     "proprietary",
-    "authors":     [
+    "name": "ingenerator/runsingle",
+    "description": "Wrapper package for ensuring a script is only run once across multiple instances.",
+    "homepage": "https://github.com/ingenerator/runsingle",
+    "type": "library",
+    "license": "BSD",
+    "authors": [
         {
-            "name":     "inGenerator",
+            "name": "inGenerator",
             "homepage": "http://www.ingenerator.com/"
         },
         {
-            "name":     "Matthias Gisder",
-            "email":    "matthias@ingenerator.com",
+            "name": "Matthias Gisder",
+            "email": "matthias@ingenerator.com",
             "homepage": "http://www.ingenerator.com"
         }
     ],
     "require": {
-        "php":                                 ">=5.3"
+        "php": ">=5.3"
     },
     "require-dev": {
-        "phpspec/phpspec":                     "dev-master",
-        "phpspec/prophecy":                    "1.1.*@dev",
-        "bossa/phpspec2-expect":               "dev-master"
+        "phpspec/phpspec": "dev-master",
+        "phpspec/prophecy": "1.1.*@dev",
+        "bossa/phpspec2-expect": "dev-master"
     },
     "suggest": {
     },
@@ -32,10 +32,10 @@
     "autoload": {
         "psr-0": {
             "Ingenerator": "src/",
-            "spec":   ""
+            "spec": ""
         }
     },
-    "bin": [],
+    "bin": ["bin/run_single.php"],
     "config": {
         "bin-dir": "bin",
         "preferred-install": "dist"
