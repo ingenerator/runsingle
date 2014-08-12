@@ -46,15 +46,17 @@ return Ingenerator\RunSingle\DbDriverFactory::factory(array(
 
 ## Running tasks
 
-  Using the standard driver with the wrapper script provided:
-```bash
-bin/run_single.php [--no-garbage--collect] --task_name=<task_name> --timeout=<timeout_in_seconds> -- <command>
-```
-
-      Or, from within PHP (see bin/run_single.php):
+### From within PHP:
 ```php
 $runsingle = \Ingenerator\RunSingle\Factory::create();
 $runsingle->execute($task_name, $command, $timeout, $automatic_garbage_collect);
+```
+See bin/run_single.php for an example.
+Read on for an explanation of the parameters.
+
+### Using the standard driver with the wrapper script provided:
+```bash
+bin/run_single.php [--no-garbage--collect] --task_name=<task_name> --timeout=<timeout_in_seconds> -- <command>
 ```
 
 ## Options:
@@ -69,13 +71,13 @@ Having --no-garbage-collect on ALL instances means the lock will never be cleare
 
 ## Parameters:
 ```bash
-task_name
+--task_name=<task_name>
 ```
 value is the identifier for the lock.
 Choose a unique, ideally short yet telling title (it has to be the same across all instances).
 
 ```bash
-timeout
+--timeout=<timeout_in_seconds>
 ```
 The amount of time in seconds the lock will be granted.
 It has to be bigger than the worst expected (longest) runtime of the command.
@@ -83,7 +85,7 @@ A good rule of thumb is to set this to the longest interval you can afford betwe
 This strategy also serves to maximise confidence in the command really having completed.
 
 ```bash
-command
+ -- <command>
 ```
 The command to be run. Make sure there is a space ON BOTH SIDES OF THE DOUBLE DASH preceding the command,
 otherwise the wrapper cannot safely distinguish your command from its own arguments.
@@ -94,7 +96,7 @@ is printed to STDOUT/STDERR as the actual script execution is done via system().
 
 ## Roll your own driver
 In order to use another storage for the lock (different database system, memcached,
-even file system), RunSingle will need to be passed an alternate Driver
+even file system), RunSingle will need to be passed an alternate driver
 implementing the LockDriver interface.
 
 Use run_single_config.php to return an instance of your driver
