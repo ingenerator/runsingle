@@ -7,11 +7,7 @@
  * @licence   BSD
  */
 
-
 namespace Ingenerator\RunSingle;
-
-use \Ingenerator\RunSingle\PdoDatabaseObject;
-use \Ingenerator\RunSingle\DbDriver;
 
 class DbDriverFactory
 {
@@ -22,8 +18,8 @@ class DbDriverFactory
      */
     public static function factory($credentials)
     {
-        $pdo       = new \PDO($credentials['db'] . ':host=' . $credentials['db_host'], $credentials['db_user'], $credentials['db_pass']);
-        $db_object = new PdoDatabaseObject($pdo, $credentials['db_name'], $credentials['db_table_name']);
+        $pdo       = new \PDO($credentials['dsn'], $credentials['db_user'], $credentials['db_pass']);
+        $db_object = new PdoDatabaseObject($pdo, $credentials['db_table_name']);
 
         return new DbDriver($db_object);
     }

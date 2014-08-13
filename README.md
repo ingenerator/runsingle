@@ -44,11 +44,9 @@ by passing the credentials to the DbDriverFactory, e.g.:
 ```php
 <?php
 return Ingenerator\RunSingle\DbDriverFactory::factory(array(
-    'db'             => 'mysql',
-    'host'           => 'localhost',
+    'dsn'            => 'mysql:host=localhost;dbname=run_single_db',
     'db_user'        => 'root',
     'db_pass'        => '',
-    'db_name'        => 'run_single_db',
     'db_table_name'  => 'locks',
 ));
 ```
