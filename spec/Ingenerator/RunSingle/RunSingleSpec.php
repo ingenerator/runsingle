@@ -32,12 +32,15 @@ class RunSingleSpec extends ObjectBehavior
      * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\CommandRunner $runner
      * @param \Ingenerator\RunSingle\ConsoleLogger $logger
+     * @param \Ingenerator\RunSingle\IpLockHolder  $lock_holder
      */
-    function let($driver, $runner, $logger)
+    function let($driver, $runner, $logger, $lock_holder)
     {
         $driver->garbage_collect(Argument::any())->willReturn();
-        $this->subject->beConstructedWith($driver, $runner, $logger);
-        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('bool'))->willReturn(FALSE);
+        $this->subject->beConstructedWith($driver, $runner, $logger, $lock_holder);
+        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('string'))
+               ->willReturn(FALSE);
+        $lock_holder->get_lock_holder()->willReturn('test');
     }
 
     function it_is_initializable()
@@ -47,28 +50,33 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
+     * @param \Ingenerator\RunSingle\IpLockHolder $lock_holder
      */
-    function it_tries_to_get_lock_for_requested_task_and_passes_timeout($driver)
+    function it_tries_to_get_lock_for_requested_task_and_passes_timeout($driver, $lock_holder)
     {
+        $lock_holder->get_lock_holder()->willReturn('test');
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
-        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, TRUE)->shouldHaveBeenCalled();
+        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, 'test')->shouldHaveBeenCalled();
     }
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
+     * @param \Ingenerator\RunSingle\IpLockHolder $lock_holder
      */
-    function it_passes_garbage_collect_option_to_get_lock_method($driver)
+    function it_passes_garbage_collect_option_to_get_lock_method($driver, $lock_holder)
     {
+        $lock_holder->get_lock_holder()->willReturn('test');
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, FALSE);
-        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, FALSE)->shouldHaveBeenCalled();
+        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, 'test')->shouldHaveBeenCalled();
     }
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver $driver
+     * @param \Ingenerator\RunSingle\LockDriver   $driver
      */
     function it_returns_zero_if_lock_not_available($driver)
     {
-        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, TRUE)->willReturn(FALSE);
+        $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('string'))
+               ->willReturn(FALSE);
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE)->shouldBe(0);
     }
 
@@ -102,7 +110,7 @@ class RunSingleSpec extends ObjectBehavior
     {
         $this->given_lock_is_available($driver, self::TASK_NAME, self::TIMEOUT, 1426828665);
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
-        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(6);
+        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(7);
     }
 
     /**
@@ -113,7 +121,7 @@ class RunSingleSpec extends ObjectBehavior
     {
         $this->given_no_lock_is_available($driver, self::TASK_NAME, self::TIMEOUT, 1426828665);
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
-        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(3);
+        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(4);
     }
 
     /**
@@ -135,7 +143,8 @@ class RunSingleSpec extends ObjectBehavior
      */
     public function given_lock_is_available($driver, $task_name, $timeout, $lock_id)
     {
-        $driver->get_lock($task_name, $timeout, TRUE)->willReturn($lock_id);
+        $driver->get_lock($task_name, $timeout, Argument::type('string'))
+               ->willReturn($lock_id);
         $driver->release_lock($task_name, $lock_id)->willReturn();
     }
 
@@ -146,6 +155,7 @@ class RunSingleSpec extends ObjectBehavior
      */
     public function given_no_lock_is_available($driver, $task_name, $timeout)
     {
-        $driver->get_lock($task_name, $timeout, TRUE)->willReturn(FALSE);
+        $driver->get_lock($task_name, $timeout, Argument::type('string'))
+               ->willReturn(FALSE);
     }
 }

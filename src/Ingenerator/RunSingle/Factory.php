@@ -29,8 +29,10 @@ class Factory
         $driver = include($driver_factory_file_path);
         $driver->set_logger($logger);
 
+        $lock_holder = new IpLockHolder;
+
         $runner    = new CommandRunner;
-        $runsingle = new RunSingle($driver, $runner, $logger);
+        $runsingle = new RunSingle($driver, $runner, $logger, $lock_holder);
 
         return $runsingle;
     }

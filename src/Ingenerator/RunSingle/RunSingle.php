@@ -34,15 +34,28 @@ class RunSingle
     protected $logger;
 
     /**
-     * @param LockDriver      $driver
-     * @param CommandRunner   $runner
-     * @param LoggerInterface $logger
+     * @var LockHolder
      */
-    public function __construct(LockDriver $driver, CommandRunner $runner, LoggerInterface $logger)
-    {
-        $this->driver = $driver;
-        $this->runner = $runner;
-        $this->logger = $logger;
+    protected $lock_holder;
+
+    /**
+     * @param LockDriver       $driver
+     * @param CommandRunner    $runner
+     * @param LoggerInterface  $logger
+     * @param LockHolder $lock_holder
+     */
+    public function __construct(
+        LockDriver $driver,
+        CommandRunner $runner,
+        LoggerInterface $logger,
+        LockHolder $lock_holder
+    ) {
+        $this->driver      = $driver;
+        $this->runner      = $runner;
+        $this->logger      = $logger;
+        $this->lock_holder = $lock_holder;
+//        //print_r($lock_holder->get_lock_holder(), 1);
+//        echo $lock_holder->get_lock_holder();
     }
 
     /**
@@ -60,15 +73,16 @@ class RunSingle
             $this->driver->garbage_collect($task_name);
         }
 
-        $this->logger->info('trying to get lock for task '. $task_name);
-        $lock_id = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
+        $this->logger->info('lock_holder id is '.$this->lock_holder->get_lock_holder());
+        $this->logger->info('trying to get lock for task '.$task_name);
+        $lock_id = $this->driver->get_lock($task_name, $timeout, $this->lock_holder->get_lock_holder());
         if ($lock_id !== FALSE) {
             $this->logger->info('executing task '.$task_name.' ...');
             $this->logger->info('<command output>');
 
             $start_time = time();
-            $exit_code = $this->runner->execute($command);
-            $end_time = time();
+            $exit_code  = $this->runner->execute($command);
+            $end_time   = time();
 
             $elapsed_time = $end_time - $start_time;
             $this->logger->info('</command output>');
@@ -78,7 +92,7 @@ class RunSingle
             return $exit_code;
         }
 
-        $this->logger->info('no lock available for '. $task_name);
+        $this->logger->info('no lock available for '.$task_name);
         return 0;
     }
 
