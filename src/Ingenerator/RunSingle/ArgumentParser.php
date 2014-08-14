@@ -51,7 +51,7 @@ class ArgumentParser
     protected function timeout($args)
     {
         if (! is_numeric($args['timeout']) || $args['timeout'] <= 0) {
-            throw(new \InvalidArgumentException('invalid or missing timeout value (set with "--timeout=".'));
+            throw new \InvalidArgumentException('invalid or missing timeout value (set with "--timeout=".');
         }
 
         return $args['timeout'];
@@ -66,7 +66,7 @@ class ArgumentParser
     protected function task_name($args)
     {
         if (! is_string($args['task_name']) || $args['task_name'] == '') {
-            throw(new \InvalidArgumentException('invalid or missing task_name value (set with "--task_name=".'));
+            throw new \InvalidArgumentException('invalid or missing task_name value (set with "--task_name=".');
         }
 
         return $args['task_name'];
@@ -96,7 +96,7 @@ class ArgumentParser
     {
         $command = implode(' ', $this->escaped_command_parts($argv));
         if ($command === '') {
-            throw(new \InvalidArgumentException('command has to be specified'));
+            throw new \InvalidArgumentException('command has to be specified');
         }
 
         return $command;

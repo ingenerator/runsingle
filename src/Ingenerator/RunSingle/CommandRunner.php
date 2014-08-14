@@ -17,7 +17,7 @@ class CommandRunner
     /**
      * @param string $command
      *
-     * @return int
+     * @return integer
      */
     public function execute($command)
     {

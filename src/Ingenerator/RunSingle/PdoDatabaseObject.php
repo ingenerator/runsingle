@@ -29,11 +29,11 @@ class PdoDatabaseObject
     protected $pdo;
 
     /**
-     * @param \PDO $pdo
-     * @param      $db_name
-     * @param      $db_table_name
+     * @param \PDO     $pdo
+     * @param   string $db_name
+     * @param   string $db_table_name
      */
-    public function __construct(\PDO $pdo, $db_name, $db_table_name)
+    public function __construct(PDO $pdo, $db_name, $db_table_name)
     {
         $this->pdo           = $pdo;
         $this->db_name       = $db_name;
@@ -63,8 +63,8 @@ class PdoDatabaseObject
     }
 
     /**
-     * @param $sql
-     * @param $params
+     * @param string  $sql
+     * @param mixed[] $params
      *
      * @return \PDOStatement
      */
@@ -82,10 +82,10 @@ class PdoDatabaseObject
     }
 
     /**
-     * @param $sql
-     * @param $params
+     * @param string  $sql
+     * @param mixed[] $params
      *
-     * @return array
+     * @return string[]|object|false
      */
     public function fetch_all($sql, $params)
     {

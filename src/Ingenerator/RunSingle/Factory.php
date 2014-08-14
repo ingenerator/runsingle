@@ -11,8 +11,6 @@
 namespace Ingenerator\RunSingle;
 
 use \Ingenerator\RunSingle\PdoDatabaseObject;
-use \Ingenerator\RunSingle\DbDriver;
-use \Ingenerator\RunSingle\CommandRunner;
 
 class Factory
 {
@@ -21,9 +19,9 @@ class Factory
 
     public static function create()
     {
-        $driver_factory_file_path = realpath('./') . '/' . self::DB_DRIVER_FACTORY_FILE;
+        $driver_factory_file_path = realpath('./').'/'.self::DB_DRIVER_FACTORY_FILE;
         if (! file_exists($driver_factory_file_path)) {
-            throw(new \Exception('Please create ' . $driver_factory_file_path . ' (you can find a template in src/Ingenerator/RunSingle/' . self::DB_DRIVER_FACTORY_FILE . ').'));
+            throw new \Exception('Please create '.$driver_factory_file_path.' (you can find a template in src/Ingenerator/RunSingle/'.self::DB_DRIVER_FACTORY_FILE.').');
         }
         $driver = include($driver_factory_file_path);
 

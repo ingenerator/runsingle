@@ -9,9 +9,6 @@
 
 namespace Ingenerator\RunSingle;
 
-use \Ingenerator\RunSingle\DbDriver;
-use \Ingenerator\RunSingle\CommandRunner;
-
 class RunSingle
 {
     /**
@@ -40,12 +37,12 @@ class RunSingle
     }
 
     /**
-     * @param $task_name
-     * @param $command
-     * @param $timeout
-     * @param $garbage_collect
+     * @param string $task_name
+     * @param string $command
+     * @param string $timeout
+     * @param string $garbage_collect
      *
-     * @return int
+     * @return integer
      */
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {

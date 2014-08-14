@@ -11,12 +11,11 @@
 namespace Ingenerator\RunSingle;
 
 use \Ingenerator\RunSingle\PdoDatabaseObject;
-use \Ingenerator\RunSingle\DbDriver;
 
 class DbDriverFactory
 {
     /**
-     * @param array $credentials
+     * @param string[] $credentials
      *
      * @return DbDriver
      */

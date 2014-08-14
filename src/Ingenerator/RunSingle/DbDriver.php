@@ -58,7 +58,7 @@ class DbDriver implements LockDriver
      * @param  int    $timeout
      * @param  bool   $garbage_collect
      *
-     * @return bool|int
+     * @return false|integer
      * @throws \Exception
      * @throws \PDOException
      */
@@ -71,13 +71,13 @@ class DbDriver implements LockDriver
         }
 
         try {
-            $this->db_object->execute("INSERT INTO " . $this->db_object->get_db_table_name() . " VALUES(:task_name, :timestamp, :timeout)", array(
+            $this->db_object->execute('INSERT INTO '.$this->db_object->get_db_table_name()." VALUES(:task_name, :timestamp, :timeout)", array(
                 ':task_name' => $task_name,
                 ':timestamp' => $timestamp,
                 ':timeout'   => $timeout
             ));
         } catch (\PDOException $e) {
-            if (substr($e->getMessage(), 0, 69) === "SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry") {
+            if (substr($e->getMessage(), 0, 69) === 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry') {
                 return FALSE;
             } else {
                 throw $e;
@@ -94,7 +94,7 @@ class DbDriver implements LockDriver
      */
     public function garbage_collect($task_name)
     {
-        $result = $this->db_object->fetch_all('SELECT * FROM ' . $this->db_object->get_db_table_name() . ' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
+        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
             ':task_name'         => $task_name,
             ':current_timestamp' => $this->get_time()
         ));
@@ -112,7 +112,7 @@ class DbDriver implements LockDriver
      */
     public function release_lock($task_name, $lock_timestamp)
     {
-        $this->db_object->execute("DELETE FROM " . $this->db_object->get_db_table_name() . " WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp", array(
+        $this->db_object->execute('DELETE FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp', array(
             ':task_name'      => $task_name,
             ':lock_timestamp' => $lock_timestamp
         ));
