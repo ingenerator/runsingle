@@ -23,10 +23,13 @@ class Factory
         if (! file_exists($driver_factory_file_path)) {
             throw new \Exception('Please create '.$driver_factory_file_path.' (you can find a template in src/Ingenerator/RunSingle/'.self::DB_DRIVER_FACTORY_FILE.').');
         }
+
+        $logger = new ConsoleLogger;
+
         $driver = include($driver_factory_file_path);
 
         $runner    = new CommandRunner;
-        $runsingle = new RunSingle($driver, $runner);
+        $runsingle = new RunSingle($driver, $runner, $logger);
 
         return $runsingle;
     }
