@@ -102,9 +102,9 @@ class PdoDatabaseObjectSpec extends ObjectBehavior
     /**
      * @param \PDO $pdo
      */
-    function its_init_sets_error_mode($pdo)
+    function it_sets_error_mode($pdo)
     {
-        $this->subject->init();
+        $this->subject->get_db_table_name();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)->shouldHaveBeenCalled();
     }
 

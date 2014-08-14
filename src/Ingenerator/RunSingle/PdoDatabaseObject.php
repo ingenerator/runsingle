@@ -31,10 +31,6 @@ class PdoDatabaseObject
     {
         $this->pdo           = $pdo;
         $this->db_table_name = $db_table_name;
-    }
-
-    public function init()
-    {
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
