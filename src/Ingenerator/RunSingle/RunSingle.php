@@ -9,6 +9,8 @@
 
 namespace Ingenerator\RunSingle;
 
+use Psr\Log\LoggerInterface;
+
 class RunSingle
 {
     /**
@@ -27,13 +29,20 @@ class RunSingle
     protected $runner;
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver      $driver
-     * @param \Ingenerator\RunSingle\CommandRunner $runner
+     * @var LoggerInterface
      */
-    public function __construct(LockDriver $driver, CommandRunner $runner)
+    protected $logger;
+
+    /**
+     * @param LockDriver        $driver
+     * @param CommandRunner   $runner
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LockDriver $driver, CommandRunner $runner, LoggerInterface $logger)
     {
         $this->driver = $driver;
         $this->runner = $runner;
+        $this->logger = $logger;
     }
 
     /**

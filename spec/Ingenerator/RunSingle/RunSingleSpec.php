@@ -29,12 +29,13 @@ class RunSingleSpec extends ObjectBehavior
     protected $subject;
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver      $driver
+     * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\CommandRunner $runner
+     * @param \Ingenerator\RunSingle\ConsoleLogger $logger
      */
-    function let($driver, $runner)
+    function let($driver, $runner, $logger)
     {
-        $this->subject->beConstructedWith($driver, $runner);
+        $this->subject->beConstructedWith($driver, $runner, $logger);
 
         $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('bool'))->willReturn(FALSE);
     }
