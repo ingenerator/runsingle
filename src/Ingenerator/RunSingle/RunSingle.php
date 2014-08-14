@@ -55,6 +55,10 @@ class RunSingle
      */
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {
+        if ($garbage_collect === TRUE) {
+            $this->driver->garbage_collect($task_name);
+        }
+
         $this->logger->info('trying to get lock for task '. $task_name);
         $lock_id = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
         if ($lock_id !== FALSE) {

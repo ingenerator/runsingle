@@ -18,11 +18,10 @@ interface LockDriver
      *
      * @param string $task_name
      * @param int    $timeout
-     * @param bool   $garbage_collect
      *
      * @return bool|int
      */
-    public function get_lock($task_name, $timeout, $garbage_collect);
+    public function get_lock($task_name, $timeout);
 
     /**
      * Garbage collect stale entries in the lock storage.

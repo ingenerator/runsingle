@@ -35,8 +35,8 @@ class RunSingleSpec extends ObjectBehavior
      */
     function let($driver, $runner, $logger)
     {
+        $driver->garbage_collect(Argument::any())->willReturn();
         $this->subject->beConstructedWith($driver, $runner, $logger);
-
         $driver->get_lock(self::TASK_NAME, self::TIMEOUT, Argument::type('bool'))->willReturn(FALSE);
     }
 
@@ -115,6 +115,17 @@ class RunSingleSpec extends ObjectBehavior
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
         $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(1);
     }
+
+    /**
+     * @param \Ingenerator\RunSingle\LockDriver $driver
+     */
+    function it_calls_garbage_collect_on_execute($driver)
+    {
+        $this->given_lock_is_available($driver, self::TASK_NAME, self::TIMEOUT, 1426828665);
+        $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
+        $driver->garbage_collect(self::TASK_NAME)->shouldHaveBeenCalledTimes(1);
+    }
+
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver

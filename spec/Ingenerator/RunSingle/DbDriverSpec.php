@@ -69,7 +69,7 @@ class DbDriverSpec extends ObjectBehavior
      */
     function its_get_lock_inserts_a_lock_if_none_already($db_object)
     {
-        $this->subject->get_lock(self::TASK_NAME, 10, TRUE);
+        $this->subject->get_lock(self::TASK_NAME, 10);
 
         $db_object->execute(self::INSERT_LOCK_SQL, array(
             ':task_name' => self::TASK_NAME,
@@ -93,7 +93,7 @@ class DbDriverSpec extends ObjectBehavior
         ))
                   ->willThrow(new \PDOException);
         try {
-            $this->subject->get_lock('testscript', 10, TRUE);
+            $this->subject->get_lock('testscript', 10);
             throw new FailureException("Expected exception not thrown");
         } catch (\PDOException $e) {
             // Expected
@@ -111,7 +111,7 @@ class DbDriverSpec extends ObjectBehavior
             ':timestamp' => self::FAKE_TIMESTAMP
         ))
                   ->willThrow(new \PDOException("SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testscript' for key 'PRIMARY'"));
-        $this->subject->get_lock('testscript', 10, TRUE)->shouldBe(FALSE);
+        $this->subject->get_lock('testscript', 10)->shouldBe(FALSE);
     }
 
     /**
@@ -125,17 +125,7 @@ class DbDriverSpec extends ObjectBehavior
             ':timestamp' => self::FAKE_TIMESTAMP
         ))
                   ->willReturn(TRUE);
-        $this->subject->get_lock('testscript', 10, TRUE)->shouldBe(self::FAKE_TIMESTAMP);
-    }
-
-    /**
-     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
-     */
-    function its_get_lock_should_run_garbage_collection($db_object)
-    {
-        $this->givenOldLockToGarbageCollect($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
-        $this->subject->get_lock(self::TASK_NAME, 10, TRUE);
-        $this->shouldHaveReleasedLock($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $this->subject->get_lock('testscript', 10)->shouldBe(self::FAKE_TIMESTAMP);
     }
 
     /**

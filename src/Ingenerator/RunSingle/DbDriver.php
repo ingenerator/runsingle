@@ -57,19 +57,14 @@ class DbDriver implements LockDriver
     /**
      * @param  string $task_name
      * @param  int    $timeout
-     * @param  bool   $garbage_collect
      *
      * @return false|integer
      * @throws \Exception
      * @throws \PDOException
      */
-    public function get_lock($task_name, $timeout, $garbage_collect)
+    public function get_lock($task_name, $timeout)
     {
         $timestamp = $this->get_time();
-
-        if ($garbage_collect === TRUE) {
-            $this->garbage_collect($task_name);
-        }
 
         try {
             $this->db_object->execute('INSERT INTO '.$this->db_object->get_db_table_name()." VALUES(:task_name, :timestamp, :timeout)", array(
