@@ -78,6 +78,7 @@ class RunSingle
             return $exit_code;
         }
 
+        $this->logger->info('no lock available for '. $task_name);
         return 0;
     }
 
