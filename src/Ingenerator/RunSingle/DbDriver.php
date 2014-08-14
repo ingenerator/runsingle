@@ -25,6 +25,11 @@ class DbDriver implements LockDriver
     protected $timeProvider = 'time';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
      */
     public function __construct(PdoDatabaseObject $db_object)
@@ -70,7 +75,7 @@ class DbDriver implements LockDriver
             $this->db_object->execute('INSERT INTO '.$this->db_object->get_db_table_name()." VALUES(:task_name, :timestamp, :timeout)", array(
                 ':task_name' => $task_name,
                 ':timestamp' => $timestamp,
-                ':timeout'   => $timeout
+                ':timeout'   => $timeout,
             ));
         } catch (\PDOException $e) {
             if (substr($e->getMessage(), 0, 69) === 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry') {
@@ -90,13 +95,16 @@ class DbDriver implements LockDriver
      */
     public function garbage_collect($task_name)
     {
+        $this->log('debug', 'garbage collecting for task '.$task_name);
         $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
             ':task_name'         => $task_name,
             ':current_timestamp' => $this->get_time()
         ));
         if (count($result) === 0) {
+            $this->log('debug', 'no stale locks found for '.$task_name);
             return;
         }
+        $this->log('notice', 'lock found for '.$task_name);
         $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
     }
 
@@ -108,6 +116,7 @@ class DbDriver implements LockDriver
      */
     public function release_lock($task_name, $lock_timestamp)
     {
+        $this->log('debug', 'releasing lock for task '.$task_name);
         $this->db_object->execute('DELETE FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp', array(
             ':task_name'      => $task_name,
             ':lock_timestamp' => $lock_timestamp
@@ -116,12 +125,23 @@ class DbDriver implements LockDriver
 
     /**
      * @param LoggerInterface $logger
-     *
-     * @return void
      */
     public function set_logger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+    }
+
+    /**
+     * Log only if logger is set.
+     *
+     * @param $level
+     * @param $message
+     */
+    protected function log($level, $message)
+    {
+        if ($this->logger) {
+            call_user_func(array($this->logger, $level), $message);
+        }
     }
 
 }

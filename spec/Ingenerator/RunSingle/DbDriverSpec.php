@@ -38,8 +38,9 @@ class DbDriverSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param \Psr\Log\LoggerInterface                 $logger
      */
-    function let($db_object)
+    function let($db_object, $logger)
     {
         $db_object->execute(self::INSERT_LOCK_SQL, array(
             ':task_name' => self::TASK_NAME,
@@ -53,7 +54,9 @@ class DbDriverSpec extends ObjectBehavior
         ))->willReturn();
 
         $this->subject->beConstructedWith($db_object);
-        $this->subject->set_time_provider(__CLASS__ . '::faketime');
+        $logger->debug(Argument::any())->willReturn();
+        $logger->notice(Argument::any())->willReturn();
+        $this->subject->set_time_provider(__CLASS__.'::faketime');
     }
 
     function it_is_initializable()
@@ -198,6 +201,52 @@ class DbDriverSpec extends ObjectBehavior
             ':lock_timestamp' => $lock_timestamp
         ))
                   ->shouldHaveBeenCalled();
+    }
+
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
+     */
+    function its_garbage_collect_logs_debug_if_no_lock_found($db_object, $logger)
+    {
+        $this->subject->set_logger($logger);
+        $this->subject->garbage_collect(self::TASK_NAME, 10, self::FAKE_TIMESTAMP);
+        $logger->debug(Argument::any())->shouldHaveBeenCalledTimes(2);
+    }
+
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
+     */
+    function its_garbage_collect_logs_notice_if_lock_found($db_object, $logger)
+    {
+        $this->subject->set_logger($logger);
+        $this->givenOldLockToGarbageCollect($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $this->subject->garbage_collect(self::TASK_NAME, 10, self::FAKE_TIMESTAMP);
+        $logger->debug(Argument::any())->shouldHaveBeenCalled();
+    }
+
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
+     */
+    function its_release_lock_logs_debug($db_object, $logger)
+    {
+        $this->subject->set_logger($logger);
+        $this->givenOldLockToGarbageCollect($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $this->subject->release_lock(self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $logger->debug(Argument::any())->shouldHaveBeenCalled();
+    }
+
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
+     */
+    function it_does_not_log_if_logger_not_set($db_object, $logger)
+    {
+        $this->givenOldLockToGarbageCollect($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $this->subject->release_lock(self::TASK_NAME, self::FAKE_TIMESTAMP);
+        $logger->debug(Argument::any())->shouldNotHaveBeenCalled();
     }
 
     /**
