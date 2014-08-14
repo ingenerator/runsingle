@@ -56,6 +56,7 @@ class RunSingle
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {
         if ($garbage_collect === TRUE) {
+            $this->logger->info('garbage collecting for task '.$task_name);
             $this->driver->garbage_collect($task_name);
         }
 

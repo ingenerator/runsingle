@@ -102,7 +102,7 @@ class RunSingleSpec extends ObjectBehavior
     {
         $this->given_lock_is_available($driver, self::TASK_NAME, self::TIMEOUT, 1426828665);
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
-        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(5);
+        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(6);
     }
 
     /**
@@ -113,7 +113,7 @@ class RunSingleSpec extends ObjectBehavior
     {
         $this->given_no_lock_is_available($driver, self::TASK_NAME, self::TIMEOUT, 1426828665);
         $this->subject->execute(self::TASK_NAME, self::COMMAND, self::TIMEOUT, TRUE);
-        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(1);
+        $logger->info(Argument::type('string'))->shouldHaveBeenCalledTimes(2);
     }
 
     /**
