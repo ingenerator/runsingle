@@ -27,6 +27,7 @@ class Factory
         $logger = new ConsoleLogger;
 
         $driver = include($driver_factory_file_path);
+        $driver->set_logger($logger);
 
         $runner    = new CommandRunner;
         $runsingle = new RunSingle($driver, $runner, $logger);

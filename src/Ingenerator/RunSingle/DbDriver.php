@@ -10,6 +10,7 @@
 namespace Ingenerator\RunSingle;
 
 use \Ingenerator\RunSingle\PdoDatabaseObject;
+use \Psr\Log\LoggerInterface;
 
 class DbDriver implements LockDriver
 {
@@ -46,11 +47,6 @@ class DbDriver implements LockDriver
     {
         $time = call_user_func($this->timeProvider);
         return $time;
-    }
-
-    public function init()
-    {
-        $this->db_object->init();
     }
 
     /**
@@ -116,6 +112,16 @@ class DbDriver implements LockDriver
             ':task_name'      => $task_name,
             ':lock_timestamp' => $lock_timestamp
         ));
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function set_logger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
 }
