@@ -73,7 +73,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver      $driver
+     * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\CommandRunner $runner
      */
     function it_runs_task_and_returns_exit_code_if_task_ran($driver, $runner)
@@ -95,7 +95,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver $driver
+     * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\ConsoleLogger $logger
      */
     function it_logs_control_flow_if_lock_available($driver, $logger)
@@ -106,7 +106,7 @@ class RunSingleSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\LockDriver $driver
+     * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\ConsoleLogger $logger
      */
     function it_logs_control_flow_if_no_lock_available($driver, $logger)
@@ -129,9 +129,9 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
-     * @param string                          $task_name
-     * @param int                             $timeout
-     * @param int                             $lock_id
+     * @param string                            $task_name
+     * @param int                               $timeout
+     * @param int                               $lock_id
      */
     public function given_lock_is_available($driver, $task_name, $timeout, $lock_id)
     {
@@ -141,8 +141,8 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
-     * @param string                          $task_name
-     * @param int                             $timeout
+     * @param string                            $task_name
+     * @param int                               $timeout
      */
     public function given_no_lock_is_available($driver, $task_name, $timeout)
     {
