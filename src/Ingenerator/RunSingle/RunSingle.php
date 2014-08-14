@@ -34,7 +34,7 @@ class RunSingle
     protected $logger;
 
     /**
-     * @param LockDriver        $driver
+     * @param LockDriver      $driver
      * @param CommandRunner   $runner
      * @param LoggerInterface $logger
      */
@@ -55,9 +55,20 @@ class RunSingle
      */
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {
+        $this->logger->info('trying to get lock for task '. $task_name);
         $lock_id = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
         if ($lock_id !== FALSE) {
+            $this->logger->info('executing task '.$task_name.' ...');
+            $this->logger->info('<command output>');
+
+            $start_time = time();
             $exit_code = $this->runner->execute($command);
+            $end_time = time();
+
+            $elapsed_time = $end_time - $start_time;
+            $this->logger->info('</command output>');
+            $this->logger->info('finished '.$task_name.' after '.$elapsed_time.' seconds with exit code '.$exit_code);
+
             $this->driver->release_lock($task_name, $lock_id);
             return $exit_code;
         }
