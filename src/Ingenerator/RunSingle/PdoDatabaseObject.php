@@ -24,6 +24,11 @@ class PdoDatabaseObject
     protected $pdo;
 
     /**
+     * @var bool
+     */
+    protected $is_initialised = FALSE;
+
+    /**
      * @param \PDO      $pdo
      * @param string    $db_table_name
      */
@@ -31,7 +36,14 @@ class PdoDatabaseObject
     {
         $this->pdo           = $pdo;
         $this->db_table_name = $db_table_name;
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+
+    protected function init()
+    {
+        if (! $this->is_initialised) {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->is_initialised = TRUE;
+        }
     }
 
     /**
@@ -50,6 +62,7 @@ class PdoDatabaseObject
      */
     public function execute($sql, $params)
     {
+        $this->init();
         $q = $this->pdo->prepare($sql);
 
         foreach ($params as $key => $value) {
@@ -69,6 +82,7 @@ class PdoDatabaseObject
      */
     public function fetch_all($sql, $params)
     {
+        $this->init();
         $q = $this->execute($sql, $params);
 
         return $q->fetchAll();

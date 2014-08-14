@@ -102,10 +102,11 @@ class PdoDatabaseObjectSpec extends ObjectBehavior
     /**
      * @param \PDO $pdo
      */
-    function it_sets_error_mode($pdo)
+    function it_initialises_lazily($pdo)
     {
-        $this->subject->get_db_table_name();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)->shouldHaveBeenCalled();
+        $this->subject->fetch_all(self::FAKE_SQL, array());
+        $this->subject->execute(self::FAKE_SQL, array());
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)->shouldHaveBeenCalledTimes(1);
     }
 
     /**
