@@ -34,7 +34,7 @@ class DbDriver implements LockDriver
     /**
      * @param callable $provider
      */
-    public function set_time_provider(callable $provider)
+    public function set_time_provider($provider)
     {
         $this->timeProvider = $provider;
     }

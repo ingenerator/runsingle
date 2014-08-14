@@ -1,5 +1,12 @@
 # RunSingle
 
+[![License](https://poser.pugx.org/ingenerator/runsingle/license.svg)](https://packagist.org/packages/ingenerator/runsingle)
+[![Master Build Status](https://travis-ci.org/ingenerator/runsingle.png?branch=master)](https://travis-ci.org/ingenerator/runsingle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ingenerator/runsingle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ingenerator/runsingle/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/ingenerator/runsingle/v/stable.svg)](https://packagist.org/packages/ingenerator/runsingle)
+[![Total Downloads](https://poser.pugx.org/ingenerator/runsingle/downloads.svg)](https://packagist.org/packages/ingenerator/runsingle)
+[![Latest Unstable Version](https://poser.pugx.org/ingenerator/runsingle/v/unstable.svg)](https://packagist.org/packages/ingenerator/runsingle)
+
 ... is a locking wrapper to ensure a command is only being run once at any given time
 across multiple instances.
 Locking is done via a database on a remote host.
@@ -37,11 +44,9 @@ by passing the credentials to the DbDriverFactory, e.g.:
 ```php
 <?php
 return Ingenerator\RunSingle\DbDriverFactory::factory(array(
-    'db'             => 'mysql',
-    'host'           => 'localhost',
+    'dsn'            => 'mysql:host=localhost;dbname=run_single_db',
     'db_user'        => 'root',
     'db_pass'        => '',
-    'db_name'        => 'run_single_db',
     'db_table_name'  => 'locks',
 ));
 ```

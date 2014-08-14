@@ -44,7 +44,7 @@ class PdoDatabaseObjectSpec extends ObjectBehavior
         $pdo->prepare(Argument::any())->willReturn($q);
         $pdo->query(Argument::type('string'))->willReturn();
         $pdo->setAttribute(Argument::any(), Argument::any())->willReturn();
-        $this->subject->beConstructedWith($pdo, 'run_single', 'locks');
+        $this->subject->beConstructedWith($pdo, 'locks');
     }
 
     function it_is_initializable()
@@ -106,16 +106,6 @@ class PdoDatabaseObjectSpec extends ObjectBehavior
     {
         $this->subject->init();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)->shouldHaveBeenCalled();
-    }
-
-    /**
-     * @param \PDO $pdo
-     */
-    function its_init_sets_database_to_use($pdo)
-    {
-        $this->subject->beConstructedWith($pdo, 'test_db', 'test_table');
-        $this->subject->init();
-        $pdo->query("use test_db")->shouldHaveBeenCalled();
     }
 
     /**
