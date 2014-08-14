@@ -17,7 +17,7 @@ class RunSingle
     protected $config_file = 'run_single_config.php';
 
     /**
-     * @var \Ingenerator\RunSingle\DbDriver
+     * @var \Ingenerator\RunSingle\LockDriver
      */
     protected $driver;
 
@@ -27,10 +27,10 @@ class RunSingle
     protected $runner;
 
     /**
-     * @param \Ingenerator\RunSingle\DbDriver      $driver
+     * @param \Ingenerator\RunSingle\LockDriver      $driver
      * @param \Ingenerator\RunSingle\CommandRunner $runner
      */
-    public function __construct(DbDriver $driver, CommandRunner $runner)
+    public function __construct(LockDriver $driver, CommandRunner $runner)
     {
         $this->driver = $driver;
         $this->runner = $runner;
@@ -46,7 +46,6 @@ class RunSingle
      */
     public function execute($task_name, $command, $timeout, $garbage_collect)
     {
-        $this->driver->init();
         $lock_id = $this->driver->get_lock($task_name, $timeout, $garbage_collect);
         if ($lock_id !== FALSE) {
             $exit_code = $this->runner->execute($command);
