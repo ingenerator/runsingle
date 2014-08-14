@@ -34,7 +34,9 @@ CREATE TABLE IF NOT EXISTS locks (
   task_name varchar(255),
   lock_timestamp int,
   timeout int,
+  lock_holder varchar(255),
   PRIMARY KEY (task_name)
+  );
 ```
 
 Create a file named 'run_single_config.php' in your project root on each instance.

@@ -16,7 +16,7 @@ use Prophecy\Argument;
 
 class DbDriverSpec extends ObjectBehavior
 {
-    const INSERT_LOCK_SQL = "INSERT INTO locks VALUES(:task_name, :timestamp, :timeout)";
+    const INSERT_LOCK_SQL = "INSERT INTO locks VALUES(:task_name, :timestamp, :timeout, :lock_holder)";
     const SELECT_LOCK_SQL = "SELECT * FROM locks WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp";
     const DELETE_LOCK_SQL = "DELETE FROM locks WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp";
 
@@ -24,6 +24,8 @@ class DbDriverSpec extends ObjectBehavior
     const TIMEOUT   = 10;
 
     const FAKE_TIMESTAMP = 1406628662;
+
+    const FAKE_LOCK_HOLDER = '127.0.0.1';
 
     /**
      * Use $this->subject to get proper type hinting for the subject class
@@ -43,9 +45,10 @@ class DbDriverSpec extends ObjectBehavior
     function let($db_object, $logger)
     {
         $db_object->execute(self::INSERT_LOCK_SQL, array(
-            ':task_name' => self::TASK_NAME,
-            ':timeout'   => self::TIMEOUT,
-            ':timestamp' => self::FAKE_TIMESTAMP
+            ':task_name'   => self::TASK_NAME,
+            ':timeout'     => self::TIMEOUT,
+            ':timestamp'   => self::FAKE_TIMESTAMP,
+            ':lock_holder' => self::FAKE_LOCK_HOLDER
         ))->willReturn();
         $db_object->get_db_table_name()->willReturn('locks');
         $db_object->fetch_all(self::SELECT_LOCK_SQL, array(
@@ -69,12 +72,13 @@ class DbDriverSpec extends ObjectBehavior
      */
     function its_get_lock_inserts_a_lock_if_none_already($db_object)
     {
-        $this->subject->get_lock(self::TASK_NAME, 10);
+        $this->subject->get_lock(self::TASK_NAME, 10, self::FAKE_LOCK_HOLDER);
 
         $db_object->execute(self::INSERT_LOCK_SQL, array(
-            ':task_name' => self::TASK_NAME,
-            ':timeout'   => self::TIMEOUT,
-            ':timestamp' => self::FAKE_TIMESTAMP
+            ':task_name'   => self::TASK_NAME,
+            ':timeout'     => self::TIMEOUT,
+            ':timestamp'   => self::FAKE_TIMESTAMP,
+            ':lock_holder' => self::FAKE_LOCK_HOLDER
         ))
                   ->shouldHaveBeenCalled();
     }
@@ -87,13 +91,14 @@ class DbDriverSpec extends ObjectBehavior
     function its_get_lock_rethrows_exception_on_insert_if_not_duplicate_key($db_object)
     {
         $db_object->execute(self::INSERT_LOCK_SQL, array(
-            ':task_name' => self::TASK_NAME,
-            ':timeout'   => self::TIMEOUT,
-            ':timestamp' => self::FAKE_TIMESTAMP
+            ':task_name'   => self::TASK_NAME,
+            ':timeout'     => self::TIMEOUT,
+            ':timestamp'   => self::FAKE_TIMESTAMP,
+            ':lock_holder' => self::FAKE_LOCK_HOLDER
         ))
                   ->willThrow(new \PDOException);
         try {
-            $this->subject->get_lock('testscript', 10);
+            $this->subject->get_lock('testscript', 10, self::FAKE_LOCK_HOLDER);
             throw new FailureException("Expected exception not thrown");
         } catch (\PDOException $e) {
             // Expected
@@ -106,12 +111,13 @@ class DbDriverSpec extends ObjectBehavior
     function its_get_lock_returns_false_if_insert_lock_throws_duplicate_key($db_object)
     {
         $db_object->execute(self::INSERT_LOCK_SQL, array(
-            ':task_name' => self::TASK_NAME,
-            ':timeout'   => self::TIMEOUT,
-            ':timestamp' => self::FAKE_TIMESTAMP
+            ':task_name'   => self::TASK_NAME,
+            ':timeout'     => self::TIMEOUT,
+            ':timestamp'   => self::FAKE_TIMESTAMP,
+            ':lock_holder' => self::FAKE_LOCK_HOLDER
         ))
                   ->willThrow(new \PDOException("SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'testscript' for key 'PRIMARY'"));
-        $this->subject->get_lock('testscript', 10)->shouldBe(FALSE);
+        $this->subject->get_lock('testscript', 10, self::FAKE_LOCK_HOLDER)->shouldBe(FALSE);
     }
 
     /**
@@ -125,7 +131,7 @@ class DbDriverSpec extends ObjectBehavior
             ':timestamp' => self::FAKE_TIMESTAMP
         ))
                   ->willReturn(TRUE);
-        $this->subject->get_lock('testscript', 10)->shouldBe(self::FAKE_TIMESTAMP);
+        $this->subject->get_lock('testscript', 10, self::FAKE_LOCK_HOLDER)->shouldBe(self::FAKE_TIMESTAMP);
     }
 
     /**
@@ -194,14 +200,13 @@ class DbDriverSpec extends ObjectBehavior
     }
 
     /**
-     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
-     * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
+     * @param \Ingenerator\RunSingle\ConsoleLogger $logger
      */
-    function its_garbage_collect_logs_debug_if_no_lock_found($db_object, $logger)
+    function its_garbage_collect_logs_debug_if_no_lock_found($logger)
     {
         $this->subject->set_logger($logger);
         $this->subject->garbage_collect(self::TASK_NAME, 10, self::FAKE_TIMESTAMP);
-        $logger->debug(Argument::any())->shouldHaveBeenCalledTimes(2);
+        $logger->debug(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     /**

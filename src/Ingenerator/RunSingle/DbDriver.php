@@ -57,20 +57,22 @@ class DbDriver implements LockDriver
     /**
      * @param  string $task_name
      * @param  int    $timeout
+     * @param string  $lock_holder
      *
      * @return false|integer
      * @throws \Exception
      * @throws \PDOException
      */
-    public function get_lock($task_name, $timeout)
+    public function get_lock($task_name, $timeout, $lock_holder)
     {
         $timestamp = $this->get_time();
 
         try {
-            $this->db_object->execute('INSERT INTO '.$this->db_object->get_db_table_name()." VALUES(:task_name, :timestamp, :timeout)", array(
-                ':task_name' => $task_name,
-                ':timestamp' => $timestamp,
-                ':timeout'   => $timeout,
+            $this->db_object->execute('INSERT INTO '.$this->db_object->get_db_table_name()." VALUES(:task_name, :timestamp, :timeout, :lock_holder)", array(
+                ':task_name'   => $task_name,
+                ':timestamp'   => $timestamp,
+                ':timeout'     => $timeout,
+                ':lock_holder' => $lock_holder,
             ));
         } catch (\PDOException $e) {
             if (substr($e->getMessage(), 0, 69) === 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry') {
