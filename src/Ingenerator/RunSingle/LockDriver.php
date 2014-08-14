@@ -9,6 +9,8 @@
 
 namespace Ingenerator\RunSingle;
 
+use \Psr\Log\LoggerInterface;
+
 interface LockDriver
 {
     /**
@@ -40,5 +42,14 @@ interface LockDriver
      * @return void
      */
     public function release_lock($task_name, $lock_id);
+
+    /**
+     * Set logger.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function set_logger(LoggerInterface $logger);
 
 }
