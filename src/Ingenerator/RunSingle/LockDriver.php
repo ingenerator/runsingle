@@ -52,4 +52,11 @@ interface LockDriver
      */
     public function set_logger(LoggerInterface $logger);
 
+    /**
+     * Return a list of locks.
+     *
+     * @return Lock[]
+     */
+    public function list_locks();
+
 }

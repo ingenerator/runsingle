@@ -16,9 +16,10 @@ use Prophecy\Argument;
 
 class DbDriverSpec extends ObjectBehavior
 {
-    const INSERT_LOCK_SQL = "INSERT INTO locks VALUES(:task_name, :timestamp, :timeout, :lock_holder)";
-    const SELECT_LOCK_SQL = "SELECT * FROM locks";
-    const DELETE_LOCK_SQL = "DELETE FROM locks WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp";
+    const INSERT_LOCK_SQL          = "INSERT INTO locks VALUES(:task_name, :timestamp, :timeout, :lock_holder)";
+    const SELECT_CURRENT_LOCKS_SQL = "SELECT * FROM locks";
+    const SELECT_LOCK_SQL          = "SELECT * FROM locks WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp";
+    const DELETE_LOCK_SQL          = "DELETE FROM locks WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp";
 
     const TASK_NAME = 'testscript';
     const TIMEOUT   = 10;
@@ -51,7 +52,10 @@ class DbDriverSpec extends ObjectBehavior
             ':lock_holder' => self::FAKE_LOCK_HOLDER
         ))->willReturn();
         $db_object->get_db_table_name()->willReturn('locks');
-        $db_object->fetch_all(self::SELECT_LOCK_SQL, array())->willReturn();
+        $db_object->fetch_all(self::SELECT_LOCK_SQL, array(
+            ':task_name'         => self::TASK_NAME,
+            ':current_timestamp' => self::FAKE_TIMESTAMP
+        ))->willReturn();
 
         $this->subject->beConstructedWith($db_object);
         $logger->debug(Argument::any())->willReturn();
@@ -175,7 +179,7 @@ class DbDriverSpec extends ObjectBehavior
 
     public function shouldHaveQueriedForLocksToGarbageCollect($db_object)
     {
-        $db_object->fetch_all(self::SELECT_LOCK_SQL, array())
+        $db_object->fetch_all(self::SELECT_LOCK_SQL, Argument::type('array'))
                   ->shouldHaveBeenCalled();
     }
 
@@ -238,34 +242,41 @@ class DbDriverSpec extends ObjectBehavior
         $logger->debug(Argument::any())->shouldNotHaveBeenCalled();
     }
 
-    function it_builds_lock_object_from_query_result()
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     *
+     */
+    function its_list_locks_returns_locks($db_object)
     {
-        $query_result_data = array(
-            'task_name'      => 'test',
-            'lock_timestamp' => self::FAKE_TIMESTAMP,
-            'timeout'        => 10,
-            'lock_holder'    => self::FAKE_LOCK_HOLDER,
-        );
-        $lock_obj = $this->subject->build_lock_object($query_result_data);
+        $this->given_locks($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
 
-        $lock_obj->get_task_name()->shouldBe('test');
-        $lock_obj->get_lock_id()->shouldBe(self::FAKE_TIMESTAMP);
-        $lock_obj->get_timeout()->shouldBe(10);
-        $lock_obj->get_lock_holder()->shouldBe(self::FAKE_LOCK_HOLDER);
-        $lock_obj->get_expires()->shouldBeLike(new \DateTime('@'.(self::FAKE_TIMESTAMP + 10)));
-        $lock_obj->get_locked_at()->shouldBeLike(new \DateTime('@'.(self::FAKE_TIMESTAMP)));
+        $result = $this->subject->list_locks();
+        $result[0]->get_task_name()->shouldBe(self::TASK_NAME);
+        $result[0]->get_lock_id()->shouldBe(self::FAKE_TIMESTAMP);
+        $result[0]->get_timeout()->shouldBe(10);
+        $result[0]->get_lock_holder()->shouldBe(self::FAKE_LOCK_HOLDER);
+        $result[0]->get_expires()->shouldBeLike(new \DateTime('@'.(self::FAKE_TIMESTAMP + 10)));
+        $result[0]->get_locked_at()->shouldBeLike(new \DateTime('@'.(self::FAKE_TIMESTAMP)));
     }
 
-    function its_list_current_logs_returns_current_locks()
+    /**
+     * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
+     * @param string                                   $task_name
+     * @param int                                      $lock_id
+     */
+    protected function given_locks($db_object, $task_name, $lock_id)
     {
-        $query_result_data = array(
-            'task_name'      => 'test',
-            'lock_timestamp' => self::FAKE_TIMESTAMP,
-            'timeout'        => 10,
-            'lock_holder'    => self::FAKE_LOCK_HOLDER,
-        );
-        $lock_obj = $this->subject->build_lock_object($query_result_data);
-        $this->subject->list_current_locks(array($query_result_data))->shouldBeLike(array($lock_obj));
+        $db_object->fetch_all(self::SELECT_CURRENT_LOCKS_SQL, array())
+                  ->willReturn(array(array('task_name'      => $task_name,
+                                           'lock_timestamp' => $lock_id,
+                                           'timeout'        => 10,
+                                           'lock_holder'    => self::FAKE_LOCK_HOLDER
+                                     )
+                  ));
+        $db_object->execute(self::DELETE_LOCK_SQL, array(
+            ':task_name'      => self::TASK_NAME,
+            ':lock_timestamp' => self::FAKE_TIMESTAMP,
+        ))->willReturn();
     }
 
     /**
@@ -275,9 +286,16 @@ class DbDriverSpec extends ObjectBehavior
      */
     protected function givenOldLockToGarbageCollect($db_object, $task_name, $lock_id)
     {
-        $db_object->fetch_all(self::SELECT_LOCK_SQL, array())
-                  ->willReturn(array(array('task_name' => $task_name, 'lock_timestamp' => $lock_id, 'timeout' => 10, 'lock_holder' => self::FAKE_LOCK_HOLDER)));
-
+        $db_object->fetch_all(self::SELECT_LOCK_SQL, array(
+            ':task_name'         => self::TASK_NAME,
+            ':current_timestamp' => self::FAKE_TIMESTAMP
+        ))
+                  ->willReturn(array(array('task_name'      => $task_name,
+                                           'lock_timestamp' => $lock_id,
+                                           'timeout'        => 10,
+                                           'lock_holder'    => self::FAKE_LOCK_HOLDER
+                                     )
+                  ));
         $db_object->execute(self::DELETE_LOCK_SQL, array(
             ':task_name'      => self::TASK_NAME,
             ':lock_timestamp' => self::FAKE_TIMESTAMP,

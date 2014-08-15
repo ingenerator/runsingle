@@ -94,21 +94,18 @@ class DbDriver implements LockDriver
      */
     public function garbage_collect($task_name)
     {
-        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name(), array());
-
-        $locks = $this->list_current_locks($result);
-        $now = new \DateTime();
-
-        foreach($locks as $lock) {
-            if ($lock->get_expires() < $now) {
-                $this->log('warning', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
-                $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
-                return;
-            }
+        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
+            ':task_name'         => $task_name,
+            ':current_timestamp' => $this->get_time()
+        ));
+        if (!$result) {
+            $this->log('debug', 'no stale locks found for task '.$task_name);
+            return;
         }
 
-        $this->log('debug', sprintf('no stale locks found for task %s', $task_name));
-        return;
+        $lock = $this->build_lock_object($result[0]);
+        $this->log('warning', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
+        $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
     }
 
     /**
@@ -152,15 +149,15 @@ class DbDriver implements LockDriver
      *
      * @return Lock
      */
-    public function build_lock_object($result)
+    protected function build_lock_object($result)
     {
         $data = array(
             'task_name' => $result['task_name'],
             'lock_id' => $result['lock_timestamp'],
             'timeout' => $result['timeout'],
             'lock_holder' => $result['lock_holder'],
-            'expires' => ($result['lock_timestamp'] + $result['timeout']),
-            'locked_at' => ($result['lock_timestamp']),
+            'expires' => new \DateTime('@'.($result['lock_timestamp'] + $result['timeout'])),
+            'locked_at' => new \DateTime('@'.($result['lock_timestamp'])),
         );
         $lock_obj = new Lock($data);
 
@@ -168,14 +165,16 @@ class DbDriver implements LockDriver
     }
 
     /**
-     * @param array $result
+     * Return a list of locks.
      *
      * @return array
      */
-    public function list_current_locks($result)
+    public function list_locks()
     {
+        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name(), array());
+
         $locks = array();
-        if (count($result) !== 0) {
+        if ($result) {
             foreach ($result as $result_item) {
                 $locks[] = $this->build_lock_object($result_item);
             }
