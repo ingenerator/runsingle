@@ -17,7 +17,6 @@ use Prophecy\Argument;
 class DbDriverSpec extends ObjectBehavior
 {
     const INSERT_LOCK_SQL = "INSERT INTO locks VALUES(:task_name, :timestamp, :timeout, :lock_holder)";
-//    const SELECT_LOCK_SQL = "SELECT * FROM locks WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp";
     const SELECT_LOCK_SQL = "SELECT * FROM locks";
     const DELETE_LOCK_SQL = "DELETE FROM locks WHERE task_name = :task_name AND lock_timestamp = :lock_timestamp";
 
@@ -282,7 +281,6 @@ class DbDriverSpec extends ObjectBehavior
         $db_object->execute(self::DELETE_LOCK_SQL, array(
             ':task_name'      => self::TASK_NAME,
             ':lock_timestamp' => self::FAKE_TIMESTAMP,
-//            ':lock_holder'    => self::FAKE_LOCK_HOLDER,
         ))->willReturn();
     }
 
