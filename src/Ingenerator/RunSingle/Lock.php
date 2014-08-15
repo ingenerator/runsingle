@@ -60,12 +60,12 @@ class Lock {
 
     public function get_expires()
     {
-        return $this->expires;
+        return new \DateTime('@'.$this->expires);
     }
 
     public function get_locked_at()
     {
-        return $this->locked_at;
+        return new \DateTime('@'.$this->locked_at);
     }
 
 }

@@ -80,33 +80,31 @@ class LockSpec extends ObjectBehavior
     {
         $datetime_expires = new \DateTime('@'.(self::FAKE_TIMESTAMP + 10));
         $data = array(
-            'expires' => $datetime_expires,
+            'expires' => self::FAKE_TIMESTAMP + 10,
         );
         $this->subject->beConstructedWith($data);
-        $this->subject->get_expires()->shouldBe($datetime_expires);
+        $this->subject->get_expires()->shouldBeLike($datetime_expires);
     }
 
     function it_returns_locked_at_for_lock()
     {
         $datetime_locked_at = new \DateTime('@'.(self::FAKE_TIMESTAMP));
         $data = array(
-            'locked_at' => $datetime_locked_at,
+            'locked_at' => self::FAKE_TIMESTAMP,
         );
         $this->subject->beConstructedWith($data);
-        $this->subject->get_locked_at()->shouldBe($datetime_locked_at);
+        $this->subject->get_locked_at()->shouldBeLike($datetime_locked_at);
     }
 
     function it_returns_lock_description()
     {
-        $datetime_locked_at = new \DateTime('@'.(self::FAKE_TIMESTAMP));
-        $datetime_expires = new \DateTime('@'.(self::FAKE_TIMESTAMP + 10));
         $data = array(
             'task_name' => 'test task_name',
             'lock_id' => self::FAKE_TIMESTAMP,
             'timeout'   => 10,
             'lock_holder' => self::FAKE_LOCK_HOLDER,
-            'expires' => $datetime_expires,
-            'locked_at' => $datetime_locked_at,
+            'expires' => self::FAKE_TIMESTAMP + 10,
+            'locked_at' => self::FAKE_TIMESTAMP,
         );
 
         $this->subject->beConstructedWith($data);
