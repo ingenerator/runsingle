@@ -1,31 +1,66 @@
 <?php
+/**
+ * Data object for locks.
+ *
+ * @author     Matthias Gisder <matthias@ingenerator.com>
+ * @copyright  2014 inGenerator Ltd
+ * @licence    BSD
+ */
+
 
 namespace Ingenerator\RunSingle;
 
 
-class Lock {
+class Lock
+{
 
     const DATE_FORMAT = 'd/m/Y H:i:s';
 
+    /**
+     * @var string
+     */
     protected $task_name;
 
+    /**
+     * @var string
+     */
     protected $lock_id;
 
+    /**
+     * @var int
+     */
     protected $timeout;
 
+    /**
+     * @var string
+     */
     protected $lock_holder;
 
+    /**
+     * @var \DateTime
+     */
     protected $expires;
 
+    /**
+     * @var \DateTime
+     */
     protected $locked_at;
 
+    /**
+     * @param mixed[] $data
+     */
     public function __construct($data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->$key = $value;
         }
     }
 
+    /**
+     * Return a description of the lock.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return sprintf("Lock %s for task %s taken by %s at %s with timeout %s expires at %s.",
@@ -60,12 +95,12 @@ class Lock {
 
     public function get_expires()
     {
-        return new \DateTime('@'.$this->expires);
+        return $this->expires;
     }
 
     public function get_locked_at()
     {
-        return new \DateTime('@'.$this->locked_at);
+        return $this->locked_at;
     }
 
 }
