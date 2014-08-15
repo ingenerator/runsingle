@@ -29,7 +29,7 @@ class Factory
         $driver = include($driver_factory_file_path);
         $driver->set_logger($logger);
 
-        $lock_holder = new IpLockHolder;
+        $lock_holder = new HostnameLockHolder;
 
         $runner    = new CommandRunner;
         $runsingle = new RunSingle($driver, $runner, $logger, $lock_holder);
