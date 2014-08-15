@@ -32,7 +32,7 @@ class RunSingleSpec extends ObjectBehavior
      * @param \Ingenerator\RunSingle\LockDriver    $driver
      * @param \Ingenerator\RunSingle\CommandRunner $runner
      * @param \Ingenerator\RunSingle\ConsoleLogger $logger
-     * @param \Ingenerator\RunSingle\IpLockHolder  $lock_holder
+     * @param \Ingenerator\RunSingle\LockHolder  $lock_holder
      */
     function let($driver, $runner, $logger, $lock_holder)
     {
@@ -50,7 +50,7 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
-     * @param \Ingenerator\RunSingle\IpLockHolder $lock_holder
+     * @param \Ingenerator\RunSingle\LockHolder $lock_holder
      */
     function it_tries_to_get_lock_for_requested_task_and_passes_timeout($driver, $lock_holder)
     {
@@ -61,7 +61,7 @@ class RunSingleSpec extends ObjectBehavior
 
     /**
      * @param \Ingenerator\RunSingle\LockDriver $driver
-     * @param \Ingenerator\RunSingle\IpLockHolder $lock_holder
+     * @param \Ingenerator\RunSingle\LockHolder $lock_holder
      */
     function it_passes_garbage_collect_option_to_get_lock_method($driver, $lock_holder)
     {
