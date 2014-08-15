@@ -56,7 +56,7 @@ class DbDriverSpec extends ObjectBehavior
 
         $this->subject->beConstructedWith($db_object);
         $logger->debug(Argument::any())->willReturn();
-        $logger->notice(Argument::any())->willReturn();
+        $logger->warning(Argument::any())->willReturn();
         $this->subject->set_time_provider(__CLASS__.'::faketime');
     }
 
@@ -208,12 +208,12 @@ class DbDriverSpec extends ObjectBehavior
      * @param \Ingenerator\RunSingle\PdoDatabaseObject $db_object
      * @param \Ingenerator\RunSingle\ConsoleLogger     $logger
      */
-    function its_garbage_collect_logs_notice_if_lock_found($db_object, $logger)
+    function its_garbage_collect_logs_warning_if_lock_found($db_object, $logger)
     {
         $this->subject->set_logger($logger);
         $this->givenOldLockToGarbageCollect($db_object, self::TASK_NAME, self::FAKE_TIMESTAMP);
         $this->subject->garbage_collect(self::TASK_NAME, 10, self::FAKE_TIMESTAMP);
-        $logger->debug(Argument::any())->shouldHaveBeenCalled();
+        $logger->warning(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     /**

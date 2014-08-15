@@ -101,7 +101,7 @@ class DbDriver implements LockDriver
 
         foreach($locks as $lock) {
             if ($lock->get_expires() < $now) {
-                $this->log('notice', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
+                $this->log('warning', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
                 $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
                 return;
             }
