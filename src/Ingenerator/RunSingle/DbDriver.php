@@ -14,6 +14,8 @@ use \Psr\Log\LoggerInterface;
 
 class DbDriver implements LockDriver
 {
+
+    const DATE_FORMAT = 'd/m/Y H:i:s';
     /**
      * @var \Ingenerator\RunSingle\PdoDatabaseObject
      */
@@ -92,16 +94,21 @@ class DbDriver implements LockDriver
      */
     public function garbage_collect($task_name)
     {
-        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name().' WHERE task_name = :task_name AND (lock_timestamp + timeout) < :current_timestamp', array(
-            ':task_name'         => $task_name,
-            ':current_timestamp' => $this->get_time()
-        ));
-        if (count($result) === 0) {
-            $this->log('debug', 'no stale locks found for '.$task_name);
-            return;
+        $result = $this->db_object->fetch_all('SELECT * FROM '.$this->db_object->get_db_table_name(), array());
+
+        $locks = $this->list_current_locks($result);
+        $now = new \DateTime();
+
+        foreach($locks as $lock) {
+            if ($lock->get_expires() < $now) {
+                $this->log('notice', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
+                $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
+                return;
+            }
         }
-        $this->log('notice', 'lock found for '.$task_name);
-        $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
+
+        $this->log('debug', sprintf('no stale locks found for task %s', $task_name));
+        return;
     }
 
     /**
@@ -138,6 +145,43 @@ class DbDriver implements LockDriver
         if ($this->logger) {
             call_user_func(array($this->logger, $level), $message);
         }
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return Lock
+     */
+    public function build_lock_object($result)
+    {
+        $data = array(
+            'task_name' => $result['task_name'],
+            'lock_id' => $result['lock_timestamp'],
+            'timeout' => $result['timeout'],
+            'lock_holder' => $result['lock_holder'],
+            'expires' => ($result['lock_timestamp'] + $result['timeout']),
+            'locked_at' => ($result['lock_timestamp']),
+        );
+        $lock_obj = new Lock($data);
+
+        return $lock_obj;
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return array
+     */
+    public function list_current_locks($result)
+    {
+        $locks = array();
+        if (count($result) !== 0) {
+            foreach ($result as $result_item) {
+                $locks[] = $this->build_lock_object($result_item);
+            }
+        }
+
+        return $locks;
     }
 
 }
