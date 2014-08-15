@@ -9,4 +9,6 @@ thumbs.db
 /.secrets
 /composer.lock
 
+./idea
+
 !/bin/run_single.php
