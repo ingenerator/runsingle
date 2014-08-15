@@ -42,7 +42,7 @@
         "preferred-install": "dist"
     },
     "extra": {
-        "branch_aliases": {
+        "branch-alias": {
             "dev-master": "1.0.x-dev"
         }
     }
