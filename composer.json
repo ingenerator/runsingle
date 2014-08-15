@@ -16,8 +16,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
-        "psr/log": "dev-master"
+        "php":     ">=5.3",
+        "psr/log": "~1.0"
     },
     "require-dev": {
         "phpspec/phpspec": "dev-master",
@@ -42,5 +42,8 @@
         "preferred-install": "dist"
     },
     "extra": {
+        "branch_aliases": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
