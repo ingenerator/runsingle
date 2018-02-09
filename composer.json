@@ -16,13 +16,13 @@
         }
     ],
     "require": {
-        "php":     ">=5.3",
+        "php":     ">=5.5",
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "dev-master",
-        "phpspec/prophecy": "1.1.*@dev",
-        "bossa/phpspec2-expect": "dev-master"
+        "phpspec/phpspec": "^3.3",
+        "phpspec/prophecy": "^1.1",
+        "bossa/phpspec2-expect": "^2.0"
     },
     "suggest": {
     },
