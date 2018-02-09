@@ -20,7 +20,7 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^3.3",
+        "phpspec/phpspec": "^2.0",
         "phpspec/prophecy": "^1.1",
         "bossa/phpspec2-expect": "^2.0"
     },
