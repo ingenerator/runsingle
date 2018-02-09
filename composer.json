@@ -3,7 +3,7 @@
     "description": "Wrapper package for ensuring a script is only run once across multiple instances.",
     "homepage": "https://github.com/ingenerator/runsingle",
     "type": "library",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "inGenerator",
