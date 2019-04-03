@@ -1,7 +1,6 @@
 /.vagrant
 /vendor
 /bin/*
-/.idea/workspace.xml
 /architecture/vendor-cookbooks/*
 Thumbs.db
 thumbs.db
@@ -9,6 +8,6 @@ thumbs.db
 /.secrets
 /composer.lock
 
-./idea
+/.idea
 
 !/bin/run_single.php
