@@ -31,7 +31,7 @@ class ArgumentParser
     public function parse(array $argv)
     {
         $this->sep_counter   = $this->find_sep_counter($argv);
-        $arg_parts           = array_merge($this->arg_defaults, $this->find_arg_parts($argv));
+        $arg_parts           = \array_merge($this->arg_defaults, $this->find_arg_parts($argv));
         $this->command_parts = $this->escaped_command_parts($argv);
 
         $args['timeout']                   = $this->timeout($arg_parts);
@@ -50,7 +50,7 @@ class ArgumentParser
      */
     protected function timeout($args)
     {
-        if (! is_numeric($args['timeout']) || $args['timeout'] <= 0) {
+        if (! \is_numeric($args['timeout']) || $args['timeout'] <= 0) {
             throw new \InvalidArgumentException('invalid or missing timeout value (set with "--timeout=".');
         }
 
@@ -65,7 +65,7 @@ class ArgumentParser
      */
     protected function task_name($args)
     {
-        if (! is_string($args['task_name']) || $args['task_name'] == '') {
+        if (! \is_string($args['task_name']) || $args['task_name'] == '') {
             throw new \InvalidArgumentException('invalid or missing task_name value (set with "--task_name=".');
         }
 
@@ -94,7 +94,7 @@ class ArgumentParser
      */
     protected function command($argv)
     {
-        $command = implode(' ', $this->escaped_command_parts($argv));
+        $command = \implode(' ', $this->escaped_command_parts($argv));
         if ($command === '') {
             throw new \InvalidArgumentException('command has to be specified');
         }
@@ -130,10 +130,10 @@ class ArgumentParser
         $arg_parts         = array();
         $key_value_strings = $this->key_value_strings($argv);
         foreach ($key_value_strings as $key_value_string) {
-            $new = explode('=', $key_value_string);
+            $new = \explode('=', $key_value_string);
 
-            if (preg_match('/\-\-/', $new[0])) {
-                $new[0] = str_replace('--', '', $new[0]);
+            if (\preg_match('/\-\-/', $new[0])) {
+                $new[0] = \str_replace('--', '', $new[0]);
                 // for arguments requiring no value assignment
                 if (! isset($new[1])) {
                     $new[1] = TRUE;
@@ -154,7 +154,7 @@ class ArgumentParser
     {
         $key_value_strings = array();
         if ($this->sep_counter > 0) {
-            $key_value_strings = array_slice($argv, 0, $this->sep_counter);
+            $key_value_strings = \array_slice($argv, 0, $this->sep_counter);
         }
 
         return $key_value_strings;
@@ -169,10 +169,10 @@ class ArgumentParser
     {
         $command_parts = array();
         if ($this->sep_counter > 0) {
-            $command_parts = array_slice($argv, $this->sep_counter + 1);
+            $command_parts = \array_slice($argv, $this->sep_counter + 1);
         }
 
-        return array_map('escapeshellarg', $command_parts);
+        return \array_map('escapeshellarg', $command_parts);
     }
 
 }

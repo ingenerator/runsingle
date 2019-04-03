@@ -10,7 +10,7 @@ class HostnameLockHolder implements LockHolder {
     public function get_lock_holder()
     {
         if(!$this->lock_holder) {
-            $this->lock_holder = gethostname();
+            $this->lock_holder = \gethostname();
         }
         return $this->lock_holder;
     }

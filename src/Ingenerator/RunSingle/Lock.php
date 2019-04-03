@@ -63,7 +63,7 @@ class Lock
      */
     public function __toString()
     {
-        return sprintf("Lock %s for task %s taken by %s at %s with timeout %s expires at %s.",
+        return \sprintf("Lock %s for task %s taken by %s at %s with timeout %s expires at %s.",
             $this->get_lock_id(),
             $this->get_task_name(),
             $this->get_lock_holder(),

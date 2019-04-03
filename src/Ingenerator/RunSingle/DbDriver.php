@@ -52,7 +52,7 @@ class DbDriver implements LockDriver
      */
     protected function get_time()
     {
-        $time = call_user_func($this->timeProvider);
+        $time = \call_user_func($this->timeProvider);
         return $time;
     }
 
@@ -77,7 +77,7 @@ class DbDriver implements LockDriver
                 ':lock_holder' => $lock_holder,
             ));
         } catch (\PDOException $e) {
-            if (substr($e->getMessage(), 0, 69) === 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry') {
+            if (\substr($e->getMessage(), 0, 69) === 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry') {
                 return FALSE;
             } else {
                 throw $e;
@@ -104,7 +104,7 @@ class DbDriver implements LockDriver
         }
 
         $lock = $this->build_lock_object($result[0]);
-        $this->log('warning', sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
+        $this->log('warning', \sprintf('stale locks found for lock:'.PHP_EOL.'    %s', $lock));
         $this->release_lock($result[0]['task_name'], $result[0]['lock_timestamp']);
     }
 
@@ -140,7 +140,7 @@ class DbDriver implements LockDriver
     protected function log($level, $message)
     {
         if ($this->logger) {
-            call_user_func(array($this->logger, $level), $message);
+            \call_user_func(array($this->logger, $level), $message);
         }
     }
 

@@ -31,18 +31,18 @@ class CommandRunnerSpec extends ObjectBehavior
 
     function it_returns_0_on_successful_command()
     {
-        $tmpdir = sys_get_temp_dir();
-        $this->subject->execute('ls ' . escapeshellarg($tmpdir) . " > /dev/null")->shouldBe(0);
+        $tmpdir = \sys_get_temp_dir();
+        $this->subject->execute('ls ' . \escapeshellarg($tmpdir) . " > /dev/null")->shouldBe(0);
     }
 
     function it_returns_nonzero_on_failing_command()
     {
         do {
-            $non_dir = sys_get_temp_dir() . '/' . uniqid();
-        } while (file_exists($non_dir));
+            $non_dir = \sys_get_temp_dir() . '/' . \uniqid();
+        } while (\file_exists($non_dir));
 
-        $this->subject->execute('ls ' . escapeshellarg($non_dir) . " 2> /dev/null")->shouldNotBe(0);
-        $this->subject->execute('ls ' . escapeshellarg($non_dir) . " 2> /dev/null")->shouldBe(2);
+        $this->subject->execute('ls ' . \escapeshellarg($non_dir) . " 2> /dev/null")->shouldNotBe(0);
+        $this->subject->execute('ls ' . \escapeshellarg($non_dir) . " 2> /dev/null")->shouldBe(2);
     }
 
     function it_runs_provided_command()
@@ -57,13 +57,13 @@ for arg in "$@"
     echo $arg >> $1;
   done
 EOF;
-        file_put_contents($script, $file_content);
-        chmod($script, 0755);
-        $tmpfile = tempnam(sys_get_temp_dir(), 'command-test_');
-        $cmd     = $script . ' ' . escapeshellarg($tmpfile) . ' some "argument with" arguments';
+        \file_put_contents($script, $file_content);
+        \chmod($script, 0755);
+        $tmpfile = \tempnam(\sys_get_temp_dir(), 'command-test_');
+        $cmd     = $script . ' ' . \escapeshellarg($tmpfile) . ' some "argument with" arguments';
         $this->subject->execute($cmd);
 
-        $received_args = file_get_contents($tmpfile);
+        $received_args = \file_get_contents($tmpfile);
         $expected      = <<<ARGS
 $tmpfile
 some
@@ -73,8 +73,8 @@ arguments
 ARGS;
 
         expect($received_args)->toBe($expected);
-        unlink($tmpfile);
-        unlink($script);
+        \unlink($tmpfile);
+        \unlink($script);
     }
 
 }
