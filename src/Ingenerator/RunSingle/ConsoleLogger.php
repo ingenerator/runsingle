@@ -17,7 +17,7 @@ class ConsoleLogger extends \Psr\Log\AbstractLogger
     public function log($level, $message, array $context = array())
     {
         $time = new \DateTime;
-        echo sprintf(
+        echo \sprintf(
             '%s: [%s] %s'.\PHP_EOL,
             $time->format('c'),
             $level,

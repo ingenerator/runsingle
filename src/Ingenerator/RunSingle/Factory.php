@@ -19,8 +19,8 @@ class Factory
 
     public static function create()
     {
-        $driver_factory_file_path = realpath('./').'/'.self::DB_DRIVER_FACTORY_FILE;
-        if (! file_exists($driver_factory_file_path)) {
+        $driver_factory_file_path = \realpath('./').'/'.self::DB_DRIVER_FACTORY_FILE;
+        if (! \file_exists($driver_factory_file_path)) {
             throw new \Exception('Please create '.$driver_factory_file_path.' (you can find a template in src/Ingenerator/RunSingle/'.self::DB_DRIVER_FACTORY_FILE.').');
         }
 

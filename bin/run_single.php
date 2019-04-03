@@ -14,9 +14,9 @@
 use \Ingenerator\RunSingle\Factory;
 use \Ingenerator\RunSingle\ArgumentParser;
 
-error_reporting(E_ALL | E_STRICT);
+\error_reporting(E_ALL | E_STRICT);
 
-if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
+if (\is_file($autoload = \getcwd() . '/vendor/autoload.php')) {
     require $autoload;
 }
 

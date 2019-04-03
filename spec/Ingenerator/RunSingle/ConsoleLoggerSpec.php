@@ -30,10 +30,10 @@ class ConsoleLoggerSpec extends ObjectBehavior
     function it_prepends_iso8601_timestamp_to_log()
     {
         $content = $this->given_logged(LogLevel::INFO, 'test');
-        list ($timestamp, $message) = explode(': ', $content);
+        list ($timestamp, $message) = \explode(': ', $content);
         $timestamp = \DateTime::createFromFormat('Y-m-d\TH:i:se', $timestamp);
         expect($timestamp)->toBeAnInstanceOf('\DateTime');
-        expect((time() - $timestamp->getTimestamp()) <= 1)->toBe(TRUE);
+        expect((\time() - $timestamp->getTimestamp()) <= 1)->toBe(TRUE);
     }
 
     function it_prepends_log_level_to_log()
@@ -51,9 +51,9 @@ class ConsoleLoggerSpec extends ObjectBehavior
 
     function given_logged($level, $message, $context = array())
     {
-        ob_start();
+        \ob_start();
         $this->subject->log($level, $message, $context);
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
 }

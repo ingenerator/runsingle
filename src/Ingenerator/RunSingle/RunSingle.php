@@ -80,9 +80,9 @@ class RunSingle
             $this->logger->info('executing task '.$task_name.' ...');
             $this->logger->info('<command output>');
 
-            $start_time = time();
+            $start_time = \time();
             $exit_code  = $this->runner->execute($command);
-            $end_time   = time();
+            $end_time   = \time();
 
             $elapsed_time = $end_time - $start_time;
             $this->logger->info('</command output>');

@@ -21,7 +21,7 @@ class CommandRunner
      */
     public function execute($command)
     {
-        system($command, $exit_code);
+        \system($command, $exit_code);
         return $exit_code;
     }
 }
