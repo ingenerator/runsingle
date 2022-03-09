@@ -1,3 +1,9 @@
+# ABANDONED PACKAGE
+
+**This package was abandoned on 9th March 2022 and will no longer be maintained. It was working and in use up to that
+date. It may be viable to fork, if still required, equally there are now various well-supported options for more
+generic locking packages (e.g. symfony/lock) which may be suitable if the tasks you want to run are PHP processes.**
+
 # RunSingle
 
 [![License](https://poser.pugx.org/ingenerator/runsingle/license.svg)](https://packagist.org/packages/ingenerator/runsingle)
